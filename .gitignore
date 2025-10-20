@@ -1,0 +1,81 @@
+# ---- Node / Workspaces ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json.*  # keep lockfile itself, ignore backups
+
+# ---- Build outputs ----
+dist/
+build/
+**/dist/
+**/build/
+# Vite cache
+.vite/
+**/.vite/
+
+# ---- TypeScript ----
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# ---- Env & secrets ----
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# ---- Logs ----
+logs/
+**/logs/
+*.log
+*.log.*
+*.out
+*.err
+
+# ---- Coverage / tests ----
+coverage/
+**/coverage/
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+
+# ---- Lint / tooling caches ----
+.eslintcache
+.stylelintcache
+
+# ---- OS files ----
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Icon?
+.Spotlight-V100
+.Trashes
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- Framework / host specific (optional) ----
+.vercel/
+.netlify/
+firebase-debug.log
+functions/lib/
+
+# ---- Misc ----
+*.local
+*.tmp
+*.temp
+
+# ---- Frontend-specific (Vite/React/Tailwind) ----
+# generated assets already covered by dist/
+# add if you generate reports:
+stats.html
+
+# ---- Backend-specific (Express) ----
+# compiled JS already covered by dist/
