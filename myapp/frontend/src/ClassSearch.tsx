@@ -1,0 +1,347 @@
+"use client";
+import {
+  Checkbox,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
+import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
+
+const courses = [
+  {
+    name: "CECS 440",
+    title: "Computer Architecture",
+    classes: [
+      { class: '3196', section: '01-SEM Regular', times: 'TuTh 8:00AM - 8:50AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '3197', section: '02-LAB Regular', times: 'TuTh 9:00AM - 10:15AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "CECS 440H",
+    title: "Computer Architecture",
+    classes: [
+      { class: '4843', section: '01-SEM Regular', times: 'TuTh 8:00AM - 8:50AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '4844', section: '02-LAB Regular', times: 'TuTh 9:00AM - 10:15AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "CECS 443",
+    title: "Software Project Management and Testing",
+    classes: [
+      { class: '6567', section: '01-SEM Regular', times: 'TuTh 6:30PM - 7:45PM', room: 'ECS Room 308', instructor: 'Daniel Link', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "CECS 449",
+    title: "Computer Graphics",
+    classes: [
+      { class: '10162', section: '01-SEM Regular', times: 'MoWe 12:30PM - 1:45PM', room: 'ECS Room 411', instructor: 'Neal Terrell', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+
+  
+]
+
+export default function ClassSearch() {
+  const [enabled, setEnabled] = useState(true);
+  return (
+    <div>
+      <form>
+        <div className="space-y-12 sm:space-y-16">
+          <div>
+            <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">
+              Class Search
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">
+              Select at least 2 search criteria. Select Search to view your
+              search results.
+            </p>
+
+            <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                <label
+                  htmlFor="subject"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                >
+                  Subject
+                </label>
+                <div className="mt-2 sm:col-span-2 sm:mt-0">
+                  <div className="grid grid-cols-1 sm:max-w-xs">
+                    <select
+                      id="subject"
+                      name="subject"
+                      autoComplete="subject-name"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
+                    >
+                      <option>Select</option>
+                      <option>Accountancy</option>
+                      <option>Art</option>
+                      <option>Art History</option>
+                      <option>Astronomy</option>
+                      <option>Biology</option>
+                      <option>Biomedical</option>
+                      <option>Chemical Engineering</option>
+                      <option>Civil Engineering</option>
+                      <option>Computer Engr & Computer Sci</option>
+                      <option>Design</option>
+                      <option>Economics</option>
+                      <option>Electric Engineering</option>
+                      <option>Engineering</option>
+                      <option>Engineering Technology</option>
+                      <option>English</option>
+                      <option>Nursing</option>
+                      <option>Physics</option>
+                    </select>
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                <label
+                  htmlFor="course-number"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                >
+                  Course Number
+                </label>
+                <div className="grid grid-cols-1 sm:max-w-xs">
+                  <select
+                    id="course-number"
+                    name="course-number"
+                    autoComplete="course-career"
+                    className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
+                  >
+                    <option>Select</option>
+                    <option>contains</option>
+                    <option>greater than or equal to</option>
+                    <option>is exactly</option>
+                    <option>less than or equal to</option>
+                  </select>
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
+                  />
+                </div>
+                <div className="mt-2 sm:col-span-1 sm:mt-0">
+                  <input
+                    id="course-number"
+                    name="course-number"
+                    type="text"
+                    autoComplete="family-name"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                <label
+                  htmlFor="course-career"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                >
+                  Course Career
+                </label>
+                <div className="mt-2 sm:col-span-2 sm:mt-0">
+                  <div className="grid grid-cols-1 sm:max-w-xs">
+                    <select
+                      id="course-career"
+                      name="course-career"
+                      autoComplete="course-career"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
+                    >
+                      <option>Select</option>
+                      <option>Non-credit CPaCE</option>
+                      <option>Post-baccalaureate</option>
+                      <option>Undergraduate</option>
+                    </select>
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                <label
+                  htmlFor="mode-of-instruction"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                >
+                  Mode of Instruction
+                </label>
+                <div className="mt-2 sm:col-span-2 sm:mt-0">
+                  <div className="grid grid-cols-1 sm:max-w-xs">
+                    <select
+                      id="mode-of-instruction"
+                      name="mode-of-instruction"
+                      autoComplete="country-name"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
+                    >
+                      <option>Select</option>
+                      <option>Asynch. Online-No Meet Times</option>
+                      <option>Face to Face - Off Campus</option>
+                      <option>Face to Face - On Campus</option>
+                      <option>Hybrid(Face to Face & Synch)</option>
+                      <option>Hybrid(Face to Face & Async)</option>
+                      <option>Online - Mixed Meet Times</option>
+                      <option>Synch. Online - Meet Times</option>
+                    </select>
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                <Checkbox
+                  checked={enabled}
+                  onChange={setEnabled}
+                  className="group block size-4 rounded border bg-white data-checked:bg-blue-500"
+                >
+                  <CheckIcon className=" size-4 fill-black group-data-checked:block" />
+                </Checkbox>
+                <label
+                  htmlFor="city"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                >
+                  Show Open Classes Only
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-end gap-x-6">
+          <button
+            type="button"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      {courses.map((course) => (
+        <Disclosure as="div" className="p-6" defaultOpen={true}>
+        <DisclosureButton className="group flex w-full items-center justify-between">
+          <span className="text-sm/6 font-medium text-black dark:text-white group-data-hover:text-black/80 dark:group-data-hover:text-white/80">
+            {course.name} - {course.title}
+          </span>
+          <ChevronDownIcon className="size-5 fill-black/60 dark:fill-white/60 group-data-hover:fill-black/50 dark:group-data-hover:fill-white/50 group-data-open:rotate-180" />
+        </DisclosureButton>
+        <DisclosurePanel className="mt-2 text-sm/5 text-black/50 dark:text-white/50">
+          <div className="mt-8 flow-root">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-3 dark:text-white"
+                      >
+                        CLASS
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        SECTION
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        DAYS & TIMES
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        ROOM
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        INSTRUCTOR
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        MEETING DATES
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        STATUS
+                      </th>
+                      <th scope="col" className="py-3.5 pr-4 pl-3 sm:pr-3">
+                        <span className="sr-only">Edit</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-900">
+                    {course.classes.map((section) => (
+                      <tr
+                        key={section.class}
+                        className="even:bg-gray-50 dark:even:bg-gray-800/50"
+                      >
+                        <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3 dark:text-white">
+                          {section.class}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          {section.section}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          {section.times}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          {section.room}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          {section.instructor}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          {section.dates}
+                        </td>
+                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                          <CheckCircleIcon
+                                aria-hidden="true"
+                                className="size-5 text-green-700"
+                              />
+                        </td>
+                        <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
+                          <a
+                            href="#"
+                            className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            Select<span className="sr-only">, {section.class}</span>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </DisclosurePanel>
+      </Disclosure>
+      ))}
+      
+    </div>
+  );
+}
