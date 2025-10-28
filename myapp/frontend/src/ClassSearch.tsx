@@ -120,6 +120,22 @@ export default function ClassSearch() {
     setModeOfInstruction(e.target.value);
   }
 
+  function clear(e:React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setSubject("Select");
+    localStorage.setItem("subject", "Select");
+    setCourseNumberQuery("Select");
+    localStorage.setItem("courseNumberQuery", "Select");
+    setCourseNumber("");
+    localStorage.setItem("courseNumber", "");
+    setCourseCareer("Select");
+    localStorage.setItem("courseCareer", "Select");
+    setModeOfInstruction("Select");
+    localStorage.setItem("modeOfInstruction", "Select");
+    setCourses([]);
+    localStorage.setItem("courses", "[]");
+  }
+
   function search(e:React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     if(subject === 'Computer Engr & Computer Sci' && courseNumberQuery === 'contains' && courseNumber === '44') {
@@ -159,7 +175,7 @@ export default function ClassSearch() {
                       name="subject"
                       autoComplete="subject-name"  
                       onChange={selectSubject}
-                      defaultValue={subject}
+                      value={subject}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -202,7 +218,7 @@ export default function ClassSearch() {
                     name="course-number-query"
                     autoComplete="course-number-query"
                     onChange={selectCourseNumberQuery}
-                    defaultValue={courseNumberQuery}
+                    value={courseNumberQuery}
                     className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                   >
                     <option>Select</option>
@@ -223,7 +239,7 @@ export default function ClassSearch() {
                     type="text"
                     autoComplete="course-number"
                     onChange={selectCourseNumber}
-                    defaultValue={courseNumber}
+                    value={courseNumber}
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                   />
                 </div>
@@ -243,7 +259,7 @@ export default function ClassSearch() {
                       name="course-career"
                       autoComplete="course-career"
                       onChange={selectCourseCareer}
-                      defaultValue={courseCareer}
+                      value={courseCareer}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -273,7 +289,7 @@ export default function ClassSearch() {
                       name="mode-of-instruction"
                       autoComplete="mode-of-instruction"
                       onChange={selectModeOfInstruction}
-                      defaultValue={modeOfInstruction}
+                      value={modeOfInstruction}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -315,9 +331,10 @@ export default function ClassSearch() {
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="button"
-            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            onClick={clear}
+            className="inline-flex justify-center rounded-md px-3 py-2 text-sm bg-red-700 font-semibold text-white dark:text-black"
           >
-            Cancel
+            Clear
           </button>
           <button
             type="submit"
