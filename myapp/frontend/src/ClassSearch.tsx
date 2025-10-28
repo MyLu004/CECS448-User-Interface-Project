@@ -6,9 +6,9 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const courses = [
+const set1 = [
   {
     name: "CECS 440",
     title: "Computer Architecture",
@@ -39,12 +39,98 @@ const courses = [
       { class: '10162', section: '01-SEM Regular', times: 'MoWe 12:30PM - 1:45PM', room: 'ECS Room 411', instructor: 'Neal Terrell', dates: '08/25/2025 - 12/10/2025', status: true },
     ]
   },
-
-  
 ]
+
+const set2 = [
+  {
+    name: "ENGL 305",
+    title: "Intermediate Creative Writing: Fiction",
+    classes: [
+      { class: '7772', section: '01-LEC Regular', times: 'MoWe 2:00PM - 3:15PM', room: 'ED2  Room 216', instructor: 'Kiana Shaley', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "ENGL 306",
+    title: "Intermediate Creative Writing: Poetry",
+    classes: [
+      { class: '6879', section: '01-LEC Regular', times: 'MoWe 9:30AM - 10:45AM', room: 'LA3  Room 206', instructor: 'Clint Margrave', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '7773', section: '02-LEC Regular', times: 'TuTh 2:00PM - 3:15PM', room: 'LA3  Room 206', instructor: 'Clint Margrave', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "ENGL 309",
+    title: "Applied Composition For Educators-K-8",
+    classes: [
+      { class: '1422', section: '03-SEM Regular', times: 'TuTh 2:00PM - 3:15PM', room: 'CINE  Room 203', instructor: 'Tammy Locklin', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '1423', section: '04-SEM Regular', times: 'We 4:00PM - 6:45PM', room: 'HC  Room 135', instructor: 'Margaret Karteron', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '3489', section: '05-SEM Regular', times: 'Tu 4:00PM - 6:45PM', room: 'LA3  Room 203', instructor: 'Stephanie Johnson', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+  {
+    name: "ENGL 310",
+    title: "Applied Composition",
+    classes: [
+      { class: '1424', section: '01-SEM Regular', times: 'MoWe 12:30PM - 1:45PM', room: 'LA1  Room 310', instructor: 'Violet Gregory', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '2236', section: '01-ACT Regular', times: 'TBA', room: 'Online', instructor: 'Violet Gregory', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '1425', section: '03-SEM Regular', times: 'MoWe 11:00AM - 12:15PM', room: 'LA2  Room 207', instructor: 'E. Jann Harris', dates: '08/25/2025 - 12/10/2025', status: true },
+      { class: '2237', section: '04-ACT Regular', times: 'TBA', room: 'Online', instructor: 'E. Jann Harris', dates: '08/25/2025 - 12/10/2025', status: true },
+    ]
+  },
+]
+
 
 export default function ClassSearch() {
   const [enabled, setEnabled] = useState(true);
+  const [subject, setSubject] = useState(() => localStorage.getItem("subject") ?? "Select");
+  const [courseNumberQuery, setCourseNumberQuery] = useState(() => localStorage.getItem("courseNumberQuery") ?? "Select");
+  const [courseNumber, setCourseNumber] = useState(() => localStorage.getItem("courseNumber") ?? "");
+  const [courseCareer, setCourseCareer] = useState(() => localStorage.getItem("courseCareer") ?? "Select");
+  const [modeOfInstruction, setModeOfInstruction] = useState(() => localStorage.getItem("modeOfInstruction") ?? "Select");
+  const [courses, setCourses] = useState(() => JSON.parse(localStorage.getItem("courses") ?? "[]"));
+
+  useEffect(() => localStorage.setItem("subject", subject));
+  useEffect(() => localStorage.setItem("courseNumberQuery", courseNumberQuery));
+  useEffect(() => localStorage.setItem("courseNumber", courseNumber));
+  useEffect(() => localStorage.setItem("courseCareer", courseCareer));
+  useEffect(() => localStorage.setItem("modeOfInstruction", modeOfInstruction));
+  useEffect(() => localStorage.setItem("courses", JSON.stringify(courses)));
+
+  function selectSubject(e:React.ChangeEvent<HTMLSelectElement>) {
+    e.preventDefault();
+    setSubject(e.target.value);
+  }
+
+  function selectCourseNumberQuery(e:React.ChangeEvent<HTMLSelectElement>) {
+    e.preventDefault();
+    setCourseNumberQuery(e.target.value);
+  }
+
+  function selectCourseNumber(e:React.ChangeEvent<HTMLSelectElement>) {
+    e.preventDefault();
+    setCourseNumber(e.target.value);
+  }
+
+  function selectCourseCareer(e:React.ChangeEvent<HTMLSelectElement>) {
+    e.preventDefault();
+    setCourseCareer(e.target.value);
+  }
+
+  function selectModeOfInstruction(e:React.ChangeEvent<HTMLSelectElement>) {
+    e.preventDefault();
+    setModeOfInstruction(e.target.value);
+  }
+
+  function search(e:React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    if(subject === 'Computer Engr & Computer Sci' && courseNumberQuery === 'contains' && courseNumber === '44') {
+      setCourses(set1);
+    } else if(subject === 'English' && courseNumberQuery === 'contains' && courseNumber === '3') {
+      setCourses(set2);
+    } else {
+      setCourses([]);
+    }
+  }
+
   return (
     <div>
       <form>
@@ -71,7 +157,9 @@ export default function ClassSearch() {
                     <select
                       id="subject"
                       name="subject"
-                      autoComplete="subject-name"
+                      autoComplete="subject-name"  
+                      onChange={selectSubject}
+                      defaultValue={subject}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -110,9 +198,11 @@ export default function ClassSearch() {
                 </label>
                 <div className="grid grid-cols-1 sm:max-w-xs">
                   <select
-                    id="course-number"
-                    name="course-number"
-                    autoComplete="course-career"
+                    id="course-number-query"
+                    name="course-number-query"
+                    autoComplete="course-number-query"
+                    onChange={selectCourseNumberQuery}
+                    defaultValue={courseNumberQuery}
                     className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                   >
                     <option>Select</option>
@@ -131,7 +221,9 @@ export default function ClassSearch() {
                     id="course-number"
                     name="course-number"
                     type="text"
-                    autoComplete="family-name"
+                    autoComplete="course-number"
+                    onChange={selectCourseNumber}
+                    defaultValue={courseNumber}
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                   />
                 </div>
@@ -150,6 +242,8 @@ export default function ClassSearch() {
                       id="course-career"
                       name="course-career"
                       autoComplete="course-career"
+                      onChange={selectCourseCareer}
+                      defaultValue={courseCareer}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -177,7 +271,9 @@ export default function ClassSearch() {
                     <select
                       id="mode-of-instruction"
                       name="mode-of-instruction"
-                      autoComplete="country-name"
+                      autoComplete="mode-of-instruction"
+                      onChange={selectModeOfInstruction}
+                      defaultValue={modeOfInstruction}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
                       <option>Select</option>
@@ -225,12 +321,14 @@ export default function ClassSearch() {
           </button>
           <button
             type="submit"
+            onClick={search}
             className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500"
           >
             Search
           </button>
         </div>
       </form>
+      {courses.length === 0 ? 'No Results' : ''}
       {courses.map((course) => (
         <Disclosure as="div" className="p-6" defaultOpen={true}>
         <DisclosureButton className="group flex w-full items-center justify-between">
