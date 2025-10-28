@@ -148,9 +148,9 @@ export default function ClassSearch() {
   }
 
   return (
-    <div>
+    <div className="">
       <form>
-        <div className="space-y-12 sm:space-y-16">
+        <div className=" space-y-12 sm:space-y-16">
           <div>
             <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">
               Class Search

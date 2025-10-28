@@ -24,8 +24,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import ShoppingCart from "./ShoppingCart";
-import ClassSearch from "./ClassSearch";
-import ClassSchedule from "./ClassSchedule";
+import ClassSearch from "../pages/ClassSearch";
+import ClassSchedule from "../pages/ClassSchedule";
 
 const navigation = [
   { name: "Class Search", href: "#classSearch", icon: MagnifyingGlassIcon },

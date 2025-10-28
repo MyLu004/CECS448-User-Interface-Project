@@ -1,5 +1,5 @@
-import ClassSearch from "./ClassSearch";
-import Sidebar from "./Sidebar";
+import ClassSearch from "./pages/ClassSearch";
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
   return (
