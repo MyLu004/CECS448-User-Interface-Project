@@ -5,88 +5,233 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
-import { useEffect, useRef, useState } from "react";
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/16/solid";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ShoppingCartContext } from "./ShoppingCartContext";
 
 const set1 = [
   {
     name: "CECS 440",
     title: "Computer Architecture",
     classes: [
-      { class: '3196', section: '01-SEM Regular', times: 'TuTh 8:00AM - 8:50AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '3197', section: '02-LAB Regular', times: 'TuTh 9:00AM - 10:15AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "3196",
+        section: "01-SEM Regular",
+        times: "TuTh 8:00AM - 8:50AM",
+        room: "ECS Room 412",
+        instructor: "Jelena Trajkovic",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "3197",
+        section: "02-LAB Regular",
+        times: "TuTh 9:00AM - 10:15AM",
+        room: "ECS Room 412",
+        instructor: "Jelena Trajkovic",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "CECS 440H",
     title: "Computer Architecture",
     classes: [
-      { class: '4843', section: '01-SEM Regular', times: 'TuTh 8:00AM - 8:50AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '4844', section: '02-LAB Regular', times: 'TuTh 9:00AM - 10:15AM', room: 'ECS Room 412', instructor: 'Jelena Trajkovic', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "4843",
+        section: "01-SEM Regular",
+        times: "TuTh 8:00AM - 8:50AM",
+        room: "ECS Room 412",
+        instructor: "Jelena Trajkovic",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "4844",
+        section: "02-LAB Regular",
+        times: "TuTh 9:00AM - 10:15AM",
+        room: "ECS Room 412",
+        instructor: "Jelena Trajkovic",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "CECS 443",
     title: "Software Project Management and Testing",
     classes: [
-      { class: '6567', section: '01-SEM Regular', times: 'TuTh 6:30PM - 7:45PM', room: 'ECS Room 308', instructor: 'Daniel Link', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "6567",
+        section: "01-SEM Regular",
+        times: "TuTh 6:30PM - 7:45PM",
+        room: "ECS Room 308",
+        instructor: "Daniel Link",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "CECS 449",
     title: "Computer Graphics",
     classes: [
-      { class: '10162', section: '01-SEM Regular', times: 'MoWe 12:30PM - 1:45PM', room: 'ECS Room 411', instructor: 'Neal Terrell', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "10162",
+        section: "01-SEM Regular",
+        times: "MoWe 12:30PM - 1:45PM",
+        room: "ECS Room 411",
+        instructor: "Neal Terrell",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
-]
+];
 
 const set2 = [
   {
     name: "ENGL 305",
     title: "Intermediate Creative Writing: Fiction",
     classes: [
-      { class: '7772', section: '01-LEC Regular', times: 'MoWe 2:00PM - 3:15PM', room: 'ED2  Room 216', instructor: 'Kiana Shaley', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "7772",
+        section: "01-LEC Regular",
+        times: "MoWe 2:00PM - 3:15PM",
+        room: "ED2  Room 216",
+        instructor: "Kiana Shaley",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "ENGL 306",
     title: "Intermediate Creative Writing: Poetry",
     classes: [
-      { class: '6879', section: '01-LEC Regular', times: 'MoWe 9:30AM - 10:45AM', room: 'LA3  Room 206', instructor: 'Clint Margrave', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '7773', section: '02-LEC Regular', times: 'TuTh 2:00PM - 3:15PM', room: 'LA3  Room 206', instructor: 'Clint Margrave', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "6879",
+        section: "01-LEC Regular",
+        times: "MoWe 9:30AM - 10:45AM",
+        room: "LA3  Room 206",
+        instructor: "Clint Margrave",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "7773",
+        section: "02-LEC Regular",
+        times: "TuTh 2:00PM - 3:15PM",
+        room: "LA3  Room 206",
+        instructor: "Clint Margrave",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "ENGL 309",
     title: "Applied Composition For Educators-K-8",
     classes: [
-      { class: '1422', section: '03-SEM Regular', times: 'TuTh 2:00PM - 3:15PM', room: 'CINE  Room 203', instructor: 'Tammy Locklin', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '1423', section: '04-SEM Regular', times: 'We 4:00PM - 6:45PM', room: 'HC  Room 135', instructor: 'Margaret Karteron', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '3489', section: '05-SEM Regular', times: 'Tu 4:00PM - 6:45PM', room: 'LA3  Room 203', instructor: 'Stephanie Johnson', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "1422",
+        section: "03-SEM Regular",
+        times: "TuTh 2:00PM - 3:15PM",
+        room: "CINE  Room 203",
+        instructor: "Tammy Locklin",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "1423",
+        section: "04-SEM Regular",
+        times: "We 4:00PM - 6:45PM",
+        room: "HC  Room 135",
+        instructor: "Margaret Karteron",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "3489",
+        section: "05-SEM Regular",
+        times: "Tu 4:00PM - 6:45PM",
+        room: "LA3  Room 203",
+        instructor: "Stephanie Johnson",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
   {
     name: "ENGL 310",
     title: "Applied Composition",
     classes: [
-      { class: '1424', section: '01-SEM Regular', times: 'MoWe 12:30PM - 1:45PM', room: 'LA1  Room 310', instructor: 'Violet Gregory', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '2236', section: '01-ACT Regular', times: 'TBA', room: 'Online', instructor: 'Violet Gregory', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '1425', section: '03-SEM Regular', times: 'MoWe 11:00AM - 12:15PM', room: 'LA2  Room 207', instructor: 'E. Jann Harris', dates: '08/25/2025 - 12/10/2025', status: true },
-      { class: '2237', section: '04-ACT Regular', times: 'TBA', room: 'Online', instructor: 'E. Jann Harris', dates: '08/25/2025 - 12/10/2025', status: true },
-    ]
+      {
+        class: "1424",
+        section: "01-SEM Regular",
+        times: "MoWe 12:30PM - 1:45PM",
+        room: "LA1  Room 310",
+        instructor: "Violet Gregory",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "2236",
+        section: "01-ACT Regular",
+        times: "TBA",
+        room: "Online",
+        instructor: "Violet Gregory",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "1425",
+        section: "03-SEM Regular",
+        times: "MoWe 11:00AM - 12:15PM",
+        room: "LA2  Room 207",
+        instructor: "E. Jann Harris",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+      {
+        class: "2237",
+        section: "04-ACT Regular",
+        times: "TBA",
+        room: "Online",
+        instructor: "E. Jann Harris",
+        dates: "08/25/2025 - 12/10/2025",
+        status: true,
+      },
+    ],
   },
-]
-
+];
 
 export default function ClassSearch() {
   const [enabled, setEnabled] = useState(true);
-  const [subject, setSubject] = useState(() => localStorage.getItem("subject") ?? "Select");
-  const [courseNumberQuery, setCourseNumberQuery] = useState(() => localStorage.getItem("courseNumberQuery") ?? "Select");
-  const [courseNumber, setCourseNumber] = useState(() => localStorage.getItem("courseNumber") ?? "");
-  const [courseCareer, setCourseCareer] = useState(() => localStorage.getItem("courseCareer") ?? "Select");
-  const [modeOfInstruction, setModeOfInstruction] = useState(() => localStorage.getItem("modeOfInstruction") ?? "Select");
-  const [courses, setCourses] = useState(() => JSON.parse(localStorage.getItem("courses") ?? "[]"));
+  const [subject, setSubject] = useState(
+    () => localStorage.getItem("subject") ?? "Select"
+  );
+  const [courseNumberQuery, setCourseNumberQuery] = useState(
+    () => localStorage.getItem("courseNumberQuery") ?? "Select"
+  );
+  const [courseNumber, setCourseNumber] = useState(
+    () => localStorage.getItem("courseNumber") ?? ""
+  );
+  const [courseCareer, setCourseCareer] = useState(
+    () => localStorage.getItem("courseCareer") ?? "Select"
+  );
+  const [modeOfInstruction, setModeOfInstruction] = useState(
+    () => localStorage.getItem("modeOfInstruction") ?? "Select"
+  );
+  const [courses, setCourses] = useState(() =>
+    JSON.parse(localStorage.getItem("courses") ?? "[]")
+  );
+  const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
 
   useEffect(() => localStorage.setItem("subject", subject));
   useEffect(() => localStorage.setItem("courseNumberQuery", courseNumberQuery));
@@ -95,32 +240,32 @@ export default function ClassSearch() {
   useEffect(() => localStorage.setItem("modeOfInstruction", modeOfInstruction));
   useEffect(() => localStorage.setItem("courses", JSON.stringify(courses)));
 
-  function selectSubject(e:React.ChangeEvent<HTMLSelectElement>) {
+  function selectSubject(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
     setSubject(e.target.value);
   }
 
-  function selectCourseNumberQuery(e:React.ChangeEvent<HTMLSelectElement>) {
+  function selectCourseNumberQuery(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
     setCourseNumberQuery(e.target.value);
   }
 
-  function selectCourseNumber(e:React.ChangeEvent<HTMLSelectElement>) {
+  function selectCourseNumber(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
     setCourseNumber(e.target.value);
   }
 
-  function selectCourseCareer(e:React.ChangeEvent<HTMLSelectElement>) {
+  function selectCourseCareer(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
     setCourseCareer(e.target.value);
   }
 
-  function selectModeOfInstruction(e:React.ChangeEvent<HTMLSelectElement>) {
+  function selectModeOfInstruction(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
     setModeOfInstruction(e.target.value);
   }
 
-  function clear(e:React.MouseEvent<HTMLButtonElement>) {
+  function clear(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setSubject("Select");
     localStorage.setItem("subject", "Select");
@@ -136,15 +281,54 @@ export default function ClassSearch() {
     localStorage.setItem("courses", "[]");
   }
 
-  function search(e:React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
-    if(subject === 'Computer Engr & Computer Sci' && courseNumberQuery === 'contains' && courseNumber === '44') {
+  function search(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    if (
+      subject === "Computer Engr & Computer Sci" &&
+      courseNumberQuery === "contains" &&
+      courseNumber === "44"
+    ) {
       setCourses(set1);
-    } else if(subject === 'English' && courseNumberQuery === 'contains' && courseNumber === '3') {
+    } else if (
+      subject === "English" &&
+      courseNumberQuery === "contains" &&
+      courseNumber === "3"
+    ) {
       setCourses(set2);
     } else {
       setCourses([]);
     }
+  }
+
+  function selectCourse(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    courseName: string,
+    course
+  ) {
+    e.preventDefault();
+    setShoppingCart([
+      ...shoppingCart,
+      {
+        name: courseName,
+        class: course.class,
+        section: course.section,
+        times: course.time,
+        room: course.room,
+        instructor: course.instructor,
+        dates: course.dates,
+        status: course.status,
+        units: 3.0,
+      },
+    ]);
+  }
+
+  function isAddedToCart(clazz: string): boolean {
+    for (let item of shoppingCart) {
+      if (item.class === clazz) {
+        return true;
+      }
+    }
+    return false;
   }
 
   return (
@@ -173,7 +357,7 @@ export default function ClassSearch() {
                     <select
                       id="subject"
                       name="subject"
-                      autoComplete="subject-name"  
+                      autoComplete="subject-name"
                       onChange={selectSubject}
                       value={subject}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
@@ -345,118 +529,125 @@ export default function ClassSearch() {
           </button>
         </div>
       </form>
-      {courses.length === 0 ? 'No Results' : ''}
+      {courses.length === 0 ? "No Results" : ""}
       {courses.map((course) => (
         <Disclosure as="div" className="p-6" defaultOpen={true}>
-        <DisclosureButton className="group flex w-full items-center justify-between">
-          <span className="text-sm/6 font-medium text-black dark:text-white group-data-hover:text-black/80 dark:group-data-hover:text-white/80">
-            {course.name} - {course.title}
-          </span>
-          <ChevronDownIcon className="size-5 fill-black/60 dark:fill-white/60 group-data-hover:fill-black/50 dark:group-data-hover:fill-white/50 group-data-open:rotate-180" />
-        </DisclosureButton>
-        <DisclosurePanel className="mt-2 text-sm/5 text-black/50 dark:text-white/50">
-          <div className="mt-8 flow-root">
-            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
-                  <thead>
-                    <tr>
-                      <th
-                        scope="col"
-                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-3 dark:text-white"
-                      >
-                        CLASS
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        SECTION
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        DAYS & TIMES
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        ROOM
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        INSTRUCTOR
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        MEETING DATES
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                      >
-                        STATUS
-                      </th>
-                      <th scope="col" className="py-3.5 pr-4 pl-3 sm:pr-3">
-                        <span className="sr-only">Edit</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-900">
-                    {course.classes.map((section) => (
-                      <tr
-                        key={section.class}
-                        className="even:bg-gray-50 dark:even:bg-gray-800/50"
-                      >
-                        <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3 dark:text-white">
-                          {section.class}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.section}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.times}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.room}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.instructor}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.dates}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          <CheckCircleIcon
-                                aria-hidden="true"
-                                className="size-5 text-green-700"
-                              />
-                        </td>
-                        <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                          >
-                            Select<span className="sr-only">, {section.class}</span>
-                          </a>
-                        </td>
+          <DisclosureButton className="group flex w-full items-center justify-between">
+            <span className="text-sm/6 font-medium text-black dark:text-white group-data-hover:text-black/80 dark:group-data-hover:text-white/80">
+              {course.name} - {course.title}
+            </span>
+            <ChevronDownIcon className="size-5 fill-black/60 dark:fill-white/60 group-data-hover:fill-black/50 dark:group-data-hover:fill-white/50 group-data-open:rotate-180" />
+          </DisclosureButton>
+          <DisclosurePanel className="mt-2 text-sm/5 text-black/50 dark:text-white/50">
+            <div className="mt-8 flow-root">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-3 dark:text-white"
+                        >
+                          CLASS
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          SECTION
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          DAYS & TIMES
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          ROOM
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          INSTRUCTOR
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          MEETING DATES
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                          STATUS
+                        </th>
+                        <th scope="col" className="py-3.5 pr-4 pl-3 sm:pr-3">
+                          <span className="sr-only">Edit</span>
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-900">
+                      {course.classes.map((clazz) => (
+                        <tr
+                          key={clazz.class}
+                          className="even:bg-gray-50 dark:even:bg-gray-800/50"
+                        >
+                          <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3 dark:text-white">
+                            {clazz.class}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            {clazz.section}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            {clazz.times}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            {clazz.room}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            {clazz.instructor}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            {clazz.dates}
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            <CheckCircleIcon
+                              aria-hidden="true"
+                              className="size-5 text-green-700"
+                            />
+                          </td>
+                          <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
+                            {isAddedToCart(clazz.class) ? (
+                              <CheckIcon className="size-6 text-green-500" />
+                            ) : (
+                              <a
+                                onClick={(e) =>
+                                  selectCourse(e, course.name, clazz)
+                                }
+                                href="#"
+                                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                              >
+                                Select
+                                <span className="sr-only">, {clazz.class}</span>
+                              </a>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-        </DisclosurePanel>
-      </Disclosure>
+          </DisclosurePanel>
+        </Disclosure>
       ))}
-      
     </div>
   );
 }
