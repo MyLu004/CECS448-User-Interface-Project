@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import { ChevronDownIcon, CheckCircleIcon } from "@heroicons/react/16/solid";
 import { useContext } from "react";
-import { ShoppingCartContext } from "./ShoppingCartContext";
+import { ShoppingCartContext } from "../ShoppingCartContext";
 
 const courses = [
   {

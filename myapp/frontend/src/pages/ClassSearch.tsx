@@ -11,7 +11,7 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/16/solid";
 import { useContext, useEffect, useRef, useState } from "react";
-import { ShoppingCartContext } from "./ShoppingCartContext";
+import { ShoppingCartContext } from "../ShoppingCartContext";
 
 const set1 = [
   {
