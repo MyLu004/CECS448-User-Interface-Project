@@ -8,19 +8,22 @@ export default function OverallProgress({ completed, total }: Props) {
 
   return (
     <div className="rounded-xl border border-neutral-200 bg-white shadow-sm">
-      <div className="border-b border-neutral-200 px-4 py-3">
-        <h2 className="text-sm font-semibold">Overall Degree Progress</h2>
+      <div className="bg-[#EBA91B] border-b rounded-t-xl border-t-xl border-neutral-200 px-4 py-3">
+        <h2 className="text-center text-sm font-semibold">Overall Degree Progress</h2>
       </div>
-      <div className="p-4">
-        <div className="mb-2 text-sm text-neutral-600">
+      <div className="ml-4 p-4">
+        {/* <div className="mb-2 text-sm text-neutral-600">
           Completed {completed}/{total} Units ({pct}%)
-        </div>
+        </div> */}
         <div className="h-3 w-full overflow-hidden rounded-full bg-neutral-200">
           <div
             className="h-full rounded-full bg-green-500 transition-[width]"
             style={{ width: `${pct}%` }}
             aria-label="degree-progress"
           />
+        </div>
+        <div className="mt-3 mb-2 text-sm text-neutral-500">
+          Completed {completed}/{total} Units ({pct}%)
         </div>
       </div>
     </div>

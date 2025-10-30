@@ -170,7 +170,7 @@ export default function Sidebar() {
                 className="block w-full rounded-lg bg-red-600 px-4 py-2 text-white text-center hover:bg-indigo-700"
               >
               Back to Home
-      </button>
+              </button>
 
           </div>
 
