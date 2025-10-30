@@ -12,28 +12,27 @@ import {
 } from "@heroicons/react/16/solid";
 import { useContext, useEffect, useRef, useState } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
+
+
+// CONSTANT IMPORT
 import type { Course } from "../../constants/courses";
 import { CSCE_course as CECS, ENGL_course as ENGL } from "../../constants/courses";
+import { SUBJECTS, type Subject } from "../../constants/subjects";
+
+import { SelectField } from "../components/SelectField";
+
+import {
+  COURSE_NUMBER_QUERY_OPS,
+  type NumberQueryOp,
+  CAREERS,
+  type Career,
+  MODES,
+  type Mode,
+} from "../../constants/select-option";
+
 
 export default function ClassSearch() {
-
-
-
-
-
-  const [enabled, setEnabled] = useState(true);
-  const [subject, setSubject] = useState(
-    () => localStorage.getItem("subject") ?? "Select"
-  );
-
-  const [courses, setCourses] = useState<Course[]>(() => {
-  try {
-    return JSON.parse(localStorage.getItem("courses") ?? "[]");
-  } catch {
-    return [];
-  }
-  });
-
+  
   const SUBJECT_TO_DATA: Record<string, Course[]> = {
     "Computer Engr & Computer Sci": CECS,
     English: ENGL,
@@ -41,50 +40,55 @@ export default function ClassSearch() {
 
   type NumberQueryOp = "contains" | "equals" | "startsWith" | "endsWith";
 
-
   // helpers
-const digits = (s: string) => s.replace(/\D+/g, ""); // "CECS 440H" -> "440"
-const matchesCourseNumber = (
-  course: Course,
-  q: string,
-  op: NumberQueryOp
-) => {
-  const nameDigits = digits(course.name);
-  const queryDigits = digits(q);
-  if (!queryDigits) return true; // no number filter entered
-  switch (op) {
-    case "equals":
-      return nameDigits === queryDigits;
-    case "startsWith":
-      return nameDigits.startsWith(queryDigits);
-    case "endsWith":
-      return nameDigits.endsWith(queryDigits);
-    case "contains":
-    default:
-      return nameDigits.includes(queryDigits);
-  }
-};
+  const setLS = (k: string, v: unknown) =>
+  localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v));
 
+  const digits = (s: string) => s.replace(/\D+/g, ""); // "CECS 440H" -> "440"
+  const matchesCourseNumber = (
+    course: Course,
+    q: string,
+    op: NumberQueryOp
+  ) => {
+    const nameDigits = digits(course.name);
+    const queryDigits = digits(q);
+    if (!queryDigits) return true; // no number filter entered
+    switch (op) {
+      case "equals":
+        return nameDigits === queryDigits;
+      case "startsWith":
+        return nameDigits.startsWith(queryDigits);
+      case "endsWith":
+        return nameDigits.endsWith(queryDigits);
+      case "contains":
+      default:
+        return nameDigits.includes(queryDigits);
+    }
+  };
 
+  const [enabled, setEnabled] = useState(true);
+  const [subject, setSubject] = useState<Subject>(
+  () => (localStorage.getItem("subject") as Subject) ?? "Select"
+);
 
-
-
-
-  const [courseNumberQuery, setCourseNumberQuery] = useState(
-    () => localStorage.getItem("courseNumberQuery") ?? "Select"
+  const [courseNumberQuery, setCourseNumberQuery] = useState<NumberQueryOp>(
+    () => (localStorage.getItem("courseNumberQuery") as NumberQueryOp) ?? "contains"
   );
-  const [courseNumber, setCourseNumber] = useState(
+  const [courseNumber, setCourseNumber] = useState<string>(
     () => localStorage.getItem("courseNumber") ?? ""
   );
-  const [courseCareer, setCourseCareer] = useState(
-    () => localStorage.getItem("courseCareer") ?? "Select"
+  const [courseCareer, setCourseCareer] = useState<Career | "">(
+    () => (localStorage.getItem("courseCareer") as Career) ?? ""
   );
-  const [modeOfInstruction, setModeOfInstruction] = useState(
-    () => localStorage.getItem("modeOfInstruction") ?? "Select"
+  const [modeOfInstruction, setModeOfInstruction] = useState<Mode | "">(
+    () => (localStorage.getItem("modeOfInstruction") as Mode) ?? ""
   );
-  // const [courses, setCourses] = useState(() =>
-  //   JSON.parse(localStorage.getItem("courses") ?? "[]")
-  // );
+
+  const [courses, setCourses] = useState<Course[]>(() => {
+    try { return JSON.parse(localStorage.getItem("courses") ?? "[]"); }
+    catch { return []; }
+  });
+
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
 
   // useEffect(() => localStorage.setItem("subject", subject));
@@ -94,40 +98,48 @@ const matchesCourseNumber = (
   // useEffect(() => localStorage.setItem("modeOfInstruction", modeOfInstruction));
   // useEffect(() => localStorage.setItem("courses", JSON.stringify(courses)));
 
-  function selectSubject(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSubject(e.target.value);
-  }
+  useEffect(() => setLS("subject", subject), [subject]);
+  useEffect(() => setLS("courseNumberQuery", courseNumberQuery), [courseNumberQuery]);
+  useEffect(() => setLS("courseNumber", courseNumber), [courseNumber]);
+  useEffect(() => setLS("courseCareer", courseCareer), [courseCareer]);
+  useEffect(() => setLS("modeOfInstruction", modeOfInstruction), [modeOfInstruction]);
+  useEffect(() => setLS("courses", courses), [courses]);
 
-  function selectCourseNumberQuery(e: React.ChangeEvent<HTMLSelectElement>) {
-    setCourseNumberQuery(e.target.value);
-  }
+  // function selectSubject(e: React.ChangeEvent<HTMLSelectElement>) {
+  //   setSubject(e.target.value);
+  // }
 
-  function selectCourseNumber(e: React.ChangeEvent<HTMLSelectElement>) {
-    setCourseNumber(e.target.value);
-  }
+  // function selectCourseNumberQuery(e: React.ChangeEvent<HTMLSelectElement>) {
+  //   setCourseNumberQuery(e.target.value);
+  // }
 
-  function selectCourseCareer(e: React.ChangeEvent<HTMLSelectElement>) {
-    setCourseCareer(e.target.value);
-  }
+  // function selectCourseNumber(e: React.ChangeEvent<HTMLSelectElement>) {
+  //   setCourseNumber(e.target.value);
+  // }
 
-  function selectModeOfInstruction(e: React.ChangeEvent<HTMLSelectElement>) {
-    setModeOfInstruction(e.target.value);
-  }
+  // function selectCourseCareer(e: React.ChangeEvent<HTMLSelectElement>) {
+  //   setCourseCareer(e.target.value);
+  // }
 
-  function clear(e: React.MouseEvent<HTMLButtonElement>) {
-    setSubject("Select");
-    localStorage.setItem("subject", "Select");
-    setCourseNumberQuery("Select");
-    localStorage.setItem("courseNumberQuery", "Select");
-    setCourseNumber("");
-    localStorage.setItem("courseNumber", "");
-    setCourseCareer("Select");
-    localStorage.setItem("courseCareer", "Select");
-    setModeOfInstruction("Select");
-    localStorage.setItem("modeOfInstruction", "Select");
-    setCourses([]);
-    localStorage.setItem("courses", "[]");
-  }
+  // function selectModeOfInstruction(e: React.ChangeEvent<HTMLSelectElement>) {
+  //   setModeOfInstruction(e.target.value);
+  // }
+
+  // todo : improve this
+  // function clear(e: React.MouseEvent<HTMLButtonElement>) {
+  //   setSubject("Select");
+  //   localStorage.setItem("subject", "Select");
+  //   setCourseNumberQuery("Select");
+  //   localStorage.setItem("courseNumberQuery", "Select");
+  //   setCourseNumber("");
+  //   localStorage.setItem("courseNumber", "");
+  //   setCourseCareer("Select");
+  //   localStorage.setItem("courseCareer", "Select");
+  //   setModeOfInstruction("Select");
+  //   localStorage.setItem("modeOfInstruction", "Select");
+  //   setCourses([]);
+  //   localStorage.setItem("courses", "[]");
+  // }
 
 // function runSearch() {
 //   if (
@@ -194,6 +206,22 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
   runSearch();
 }
 
+  function clear(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setSubject("Select");
+    localStorage.setItem("subject", "Select");
+    setCourseNumberQuery("Select");
+    localStorage.setItem("courseNumberQuery", "Select");
+    setCourseNumber("");
+    localStorage.setItem("courseNumber", "");
+    setCourseCareer("Select");
+    localStorage.setItem("courseCareer", "Select");
+    setModeOfInstruction("Select");
+    localStorage.setItem("modeOfInstruction", "Select");
+    setCourses([]);
+    localStorage.setItem("courses", "[]");
+  }
+
   return (
     <div className="">
       <form onSubmit={onSubmit}>
@@ -217,39 +245,18 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <div className="grid grid-cols-1 sm:max-w-xs">
-                    <select
+                    <SelectField
                       id="subject"
-                      name="subject"
-                      autoComplete="subject-name"
-                      onChange={selectSubject}
                       value={subject}
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
-                    >
+                      options={SUBJECTS}
+                      placeholder="Select subject…"
+                      onValueChange={(v) => setSubject(v as Subject)}
+                    />
 
-                      {/* put these in constant and map it */}
-                      <option>Select</option>
-                      <option>Accountancy</option>
-                      <option>Art</option>
-                      <option>Art History</option>
-                      <option>Astronomy</option>
-                      <option>Biology</option>
-                      <option>Biomedical</option>
-                      <option>Chemical Engineering</option>
-                      <option>Civil Engineering</option>
-                      <option>Computer Engr & Computer Sci</option>
-                      <option>Design</option>
-                      <option>Economics</option>
-                      <option>Electric Engineering</option>
-                      <option>Engineering</option>
-                      <option>Engineering Technology</option>
-                      <option>English</option>
-                      <option>Nursing</option>
-                      <option>Physics</option>
-                    </select>
-                    <ChevronDownIcon
+                    {/* <ChevronDownIcon
                       aria-hidden="true"
                       className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -262,23 +269,13 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                   Course Number
                 </label>
                 <div className="grid grid-cols-1 sm:max-w-xs">
-                  <select
+                  <SelectField
                     id="course-number-query"
-                    name="course-number-query"
-                    autoComplete="course-number-query"
-                    onChange={selectCourseNumberQuery}
                     value={courseNumberQuery}
+                    options={COURSE_NUMBER_QUERY_OPS}
+                    placeholder="Number match…"
+                    onValueChange={(v) => setCourseNumberQuery(v as NumberQueryOp)}
                     className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
-                  >
-                    <option>Select</option>
-                    <option>contains</option>
-                    <option>greater than or equal to</option>
-                    <option>is exactly</option>
-                    <option>less than or equal to</option>
-                  </select>
-                  <ChevronDownIcon
-                    aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
                   />
                 </div>
                 <div className="mt-2 sm:col-span-1 sm:mt-0">
@@ -287,8 +284,8 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                     name="course-number"
                     type="text"
                     autoComplete="course-number"
-                    onChange={(e) => setCourseNumber(e.target.value)}
                     value={courseNumber}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCourseNumber(e.currentTarget.value)}
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
                   />
                 </div>
@@ -303,23 +300,17 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <div className="grid grid-cols-1 sm:max-w-xs">
-                    <select
-                      id="course-career"
-                      name="course-career"
-                      autoComplete="course-career"
-                      onChange={selectCourseCareer}
-                      value={courseCareer}
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
-                    >
-                      <option>Select</option>
-                      <option>Non-credit CPaCE</option>
-                      <option>Post-baccalaureate</option>
-                      <option>Undergraduate</option>
-                    </select>
-                    <ChevronDownIcon
+                    <SelectField
+                        id="course-career"
+                        value={courseCareer ?? ""}
+                        options={CAREERS}
+                        placeholder="Select career…"
+                        onValueChange={(v) => setCourseCareer(v as Career | "")}
+                      />
+                    {/* <ChevronDownIcon
                       aria-hidden="true"
                       className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -333,27 +324,17 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <div className="grid grid-cols-1 sm:max-w-xs">
-                    <select
+                    <SelectField
                       id="mode-of-instruction"
-                      name="mode-of-instruction"
-                      autoComplete="mode-of-instruction"
-                      onChange={selectModeOfInstruction}
-                      value={modeOfInstruction}
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
-                    >
-                      <option>Select</option>
-                      <option>Asynch. Online-No Meet Times</option>
-                      <option>Face to Face - Off Campus</option>
-                      <option>Face to Face - On Campus</option>
-                      <option>Hybrid(Face to Face & Synch)</option>
-                      <option>Hybrid(Face to Face & Async)</option>
-                      <option>Online - Mixed Meet Times</option>
-                      <option>Synch. Online - Meet Times</option>
-                    </select>
-                    <ChevronDownIcon
+                      value={modeOfInstruction ?? ""}
+                      options={MODES}
+                      placeholder="Select mode…"
+                      onValueChange={(v) => setModeOfInstruction(v as Mode | "")}
+                    />
+                    {/* <ChevronDownIcon
                       aria-hidden="true"
                       className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400"
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
