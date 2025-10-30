@@ -91,12 +91,6 @@ export default function ClassSearch() {
 
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
 
-  // useEffect(() => localStorage.setItem("subject", subject));
-  // useEffect(() => localStorage.setItem("courseNumberQuery", courseNumberQuery));
-  // useEffect(() => localStorage.setItem("courseNumber", courseNumber));
-  // useEffect(() => localStorage.setItem("courseCareer", courseCareer));
-  // useEffect(() => localStorage.setItem("modeOfInstruction", modeOfInstruction));
-  // useEffect(() => localStorage.setItem("courses", JSON.stringify(courses)));
 
   useEffect(() => setLS("subject", subject), [subject]);
   useEffect(() => setLS("courseNumberQuery", courseNumberQuery), [courseNumberQuery]);
@@ -105,59 +99,16 @@ export default function ClassSearch() {
   useEffect(() => setLS("modeOfInstruction", modeOfInstruction), [modeOfInstruction]);
   useEffect(() => setLS("courses", courses), [courses]);
 
-  // function selectSubject(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   setSubject(e.target.value);
-  // }
+ 
+const clear = () => {
+  setSubject("Select" as Subject);
+  setCourseNumberQuery("contains" as NumberQueryOp);
+  setCourseNumber("");
+  setCourseCareer("" as Career | "");
+  setModeOfInstruction("" as Mode | "");
+  setCourses([]);
+};
 
-  // function selectCourseNumberQuery(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   setCourseNumberQuery(e.target.value);
-  // }
-
-  // function selectCourseNumber(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   setCourseNumber(e.target.value);
-  // }
-
-  // function selectCourseCareer(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   setCourseCareer(e.target.value);
-  // }
-
-  // function selectModeOfInstruction(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   setModeOfInstruction(e.target.value);
-  // }
-
-  // todo : improve this
-  // function clear(e: React.MouseEvent<HTMLButtonElement>) {
-  //   setSubject("Select");
-  //   localStorage.setItem("subject", "Select");
-  //   setCourseNumberQuery("Select");
-  //   localStorage.setItem("courseNumberQuery", "Select");
-  //   setCourseNumber("");
-  //   localStorage.setItem("courseNumber", "");
-  //   setCourseCareer("Select");
-  //   localStorage.setItem("courseCareer", "Select");
-  //   setModeOfInstruction("Select");
-  //   localStorage.setItem("modeOfInstruction", "Select");
-  //   setCourses([]);
-  //   localStorage.setItem("courses", "[]");
-  // }
-
-// function runSearch() {
-//   if (
-//     subject === "Computer Engr & Computer Sci" &&
-//     courseNumberQuery === "contains" &&
-//     courseNumber === "44"
-//   ) {
-//     setCourses(set1);
-//   } else if (
-//     subject === "English" &&
-//     courseNumberQuery === "contains" &&
-//     courseNumber === "3"
-//   ) {
-//     setCourses(set2);
-//   } else {
-//     setCourses([]);
-//   }
-// }
 
 // improved search
 function runSearch() {
@@ -206,22 +157,7 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
   runSearch();
 }
 
-  function clear(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    setSubject("Select");
-    localStorage.setItem("subject", "Select");
-    setCourseNumberQuery("Select");
-    localStorage.setItem("courseNumberQuery", "Select");
-    setCourseNumber("");
-    localStorage.setItem("courseNumber", "");
-    setCourseCareer("Select");
-    localStorage.setItem("courseCareer", "Select");
-    setModeOfInstruction("Select");
-    localStorage.setItem("modeOfInstruction", "Select");
-    setCourses([]);
-    localStorage.setItem("courses", "[]");
-  }
-
+ 
   return (
     <div className="">
       <form onSubmit={onSubmit}>
