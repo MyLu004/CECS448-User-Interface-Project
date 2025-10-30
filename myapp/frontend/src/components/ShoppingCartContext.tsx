@@ -1,5 +1,5 @@
 "use client";
-import { createContext } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 export type CartItem = {
   name: string;
@@ -18,8 +18,44 @@ type ShoppingCartCtx = {
   setShoppingCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
 };
 
-// default no-op setter prevents undefined checks in consumers
 export const ShoppingCartContext = createContext<ShoppingCartCtx>({
   shoppingCart: [],
   setShoppingCart: () => {},
 });
+
+// ✅ Provider that owns the state + localStorage sync
+export function ShoppingCartProvider({ children }: { children: React.ReactNode }) {
+  const [shoppingCart, setShoppingCart] = useState<CartItem[]>(() => {
+    // lazy init so we don’t flash empty before hydration
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem("shoppingCart");
+      return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // load on first mount (defensive if you remove the lazy init later)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("shoppingCart");
+      if (raw) setShoppingCart(JSON.parse(raw) as CartItem[]);
+    } catch {}
+  }, []);
+
+  // save on every change
+  useEffect(() => {
+    try {
+      localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart));
+    } catch {}
+  }, [shoppingCart]);
+
+  const value = useMemo(() => ({ shoppingCart, setShoppingCart }), [shoppingCart]);
+
+  return (
+    <ShoppingCartContext.Provider value={value}>
+      {children}
+    </ShoppingCartContext.Provider>
+  );
+}

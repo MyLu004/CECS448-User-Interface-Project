@@ -1,45 +1,28 @@
 import {
   Button,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
 } from "@headlessui/react";
 import { ChevronDownIcon, CheckCircleIcon } from "@heroicons/react/16/solid";
 import { useContext } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
 
-const courses = [
-  {
-    name: "CECS 443-01",
-    class: "6567",
-    section: "01-SEM Regular",
-    times: "TuTh 6:30PM - 7:45PM",
-    room: "ECS Room 308",
-    instructor: "Daniel Link",
-    dates: "08/25/2025 - 12/10/2025",
-    status: true,
-    units: 3.0,
-  },
-  {
-    name: "CECS 449-01",
-    class: "10162",
-    section: "01-SEM Regular",
-    times: "MoWe 12:30PM - 1:45PM",
-    room: "ECS Room 411",
-    instructor: "Neal Terrell",
-    dates: "08/25/2025 - 12/10/2025",
-    status: true,
-    units: 3.0,
-  },
-];
+
 
 export default function ShoppingCart() {
   const {shoppingCart, setShoppingCart} = useContext(ShoppingCartContext);
 
-  function deleteItem(e:React.MouseEvent<HTMLButtonElement>, clazz:string) {
-    e.preventDefault();
-    setShoppingCart(shoppingCart.filter(course => course.class != clazz));
-  }
+  const totalUnits = shoppingCart.reduce((sum, c) => sum + (Number(c.units) || 0), 0);
+
+
+  const deleteItem = (clazz: string) => {
+  setShoppingCart(shoppingCart.filter((c) => c.class !== clazz));
+  };
+
+
+
+  // function deleteItem(e:React.MouseEvent<HTMLButtonElement>, clazz:string) {
+  //   e.preventDefault();
+  //   setShoppingCart(shoppingCart.filter(course => course.class != clazz));
+  // }
 
   return (
     <div>
@@ -106,8 +89,9 @@ export default function ShoppingCart() {
                   >
                     <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3 dark:text-white">
                       <Button
-                      onClick={e => deleteItem(e, section.class)} 
-                      className="rounded-lg px-5  py-2 bg-red-500 text-white">
+                        onClick={() => deleteItem(section.class)}
+                        className="rounded-lg px-5 py-2 bg-red-500 text-white"
+                      >
                         Delete
                       </Button>
                     </td>
