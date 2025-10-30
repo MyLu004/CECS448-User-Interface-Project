@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, type ReactNode } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -26,6 +31,7 @@ import {
 import ShoppingCart from "./ShoppingCart";
 import ClassSearch from "../pages/ClassSearch";
 import ClassSchedule from "../pages/ClassSchedule";
+import { ShoppingCartContext } from "../ShoppingCartContext";
 
 const navigation = [
   { name: "Class Search", href: "#classSearch", icon: MagnifyingGlassIcon },
@@ -42,11 +48,14 @@ export default function Sidebar() {
 
   const [selectPage, setSelectPage] = useState("#classSearch");
 
-  function switchPage(e:React.MouseEvent<HTMLAnchorElement>, href:string) {
+  const [shoppingCart, setShoppingCart] = useState(() => JSON.parse(localStorage.getItem("shoppingCart") ??  "[]"));
+
+  useEffect(() => localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart)));
+
+  function switchPage(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
     e.preventDefault();
     setSelectPage(href);
   }
-
 
   return (
     <>
@@ -175,7 +184,15 @@ export default function Sidebar() {
                                 )}
                               />
                               {item.name}
+                              {item.href === "#shoppingCart" ? (
+                              <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 inset-ring inset-ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-400/20">
+                                {shoppingCart.length}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                             </a>
+                            
                           </li>
                         ))}
                       </ul>
@@ -225,7 +242,17 @@ export default function Sidebar() {
 
         <main className="py-10 lg:pl-72">
           <div className="px-4 sm:px-6 lg:px-8">
-            {selectPage === '#shoppingCart' ? <ShoppingCart/> : selectPage === '#classSchedule' ? <ClassSchedule/> : <ClassSearch/>}
+            <ShoppingCartContext.Provider
+              value={{ shoppingCart, setShoppingCart }}
+            >
+              {selectPage === "#shoppingCart" ? (
+                <ShoppingCart />
+              ) : selectPage === "#classSchedule" ? (
+                <ClassSchedule />
+              ) : (
+                <ClassSearch />
+              )}
+            </ShoppingCartContext.Provider>
           </div>
         </main>
       </div>
