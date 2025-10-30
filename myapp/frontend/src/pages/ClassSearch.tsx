@@ -120,6 +120,7 @@ export default function ClassSearch() {
     setModeOfInstruction(e.target.value);
   }
 
+  // local save the data for the user
   function clear(e:React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setSubject("Select");
@@ -136,6 +137,8 @@ export default function ClassSearch() {
     localStorage.setItem("courses", "[]");
   }
 
+
+  // input these function more generative
   function search(e:React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     if(subject === 'Computer Engr & Computer Sci' && courseNumberQuery === 'contains' && courseNumber === '44') {
@@ -150,7 +153,7 @@ export default function ClassSearch() {
   return (
     <div className="">
       <form>
-        <div className=" space-y-12 sm:space-y-16">
+        <div className=" space-y-12 sm:space-y-16 ">
           <div>
             <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">
               Class Search
@@ -164,7 +167,7 @@ export default function ClassSearch() {
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label
                   htmlFor="subject"
-                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-black"
                 >
                   Subject
                 </label>
@@ -178,6 +181,8 @@ export default function ClassSearch() {
                       value={subject}
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base border-2 border-gray-300 text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
                     >
+
+                      {/* put these in constant and map it */}
                       <option>Select</option>
                       <option>Accountancy</option>
                       <option>Art</option>
@@ -208,7 +213,7 @@ export default function ClassSearch() {
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label
                   htmlFor="course-number"
-                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-black"
                 >
                   Course Number
                 </label>
@@ -248,7 +253,7 @@ export default function ClassSearch() {
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label
                   htmlFor="course-career"
-                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-black"
                 >
                   Course Career
                 </label>
@@ -278,7 +283,7 @@ export default function ClassSearch() {
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label
                   htmlFor="mode-of-instruction"
-                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-black"
                 >
                   Mode of Instruction
                 </label>
@@ -319,7 +324,7 @@ export default function ClassSearch() {
                 </Checkbox>
                 <label
                   htmlFor="city"
-                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white"
+                  className="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-black"
                 >
                   Show Open Classes Only
                 </label>
