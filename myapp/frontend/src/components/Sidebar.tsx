@@ -31,7 +31,7 @@ import {
 import ShoppingCart from "../pages/ShoppingCart";
 import ClassSearch from "../pages/ClassSearch";
 import ClassSchedule from "../pages/ClassSchedule";
-import { ShoppingCartContext } from "../ShoppingCartContext";
+import { ShoppingCartContext } from "./ShoppingCartContext";
 
 const navigation = [
   { name: "Class Search", href: "#classSearch", icon: MagnifyingGlassIcon },
