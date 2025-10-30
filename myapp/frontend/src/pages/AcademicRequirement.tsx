@@ -1,8 +1,54 @@
-export default function AcademyRequirement() {
+// app/academic-requirements/page.tsx  (or pages/AcademicRequirementsPage.tsx)
+"use client";
+
+import LeftInfoTab from "../components/LeftInfoTab"
+import OverallProgress from "../components/academics/OverallProgress";
+import CurrentAcademicInfo from "../components/academics/CurrentAcademicInfo";
+import DegreeChangeNotice from "../components/academics/DegreeChangeNotice";
+
+export default function AcademicRequirementsPage() {
+  // mock data – wire to real data later
+  const progress = { completed: 80, total: 120 };
+  const info = {
+    name: "Brandon Huett",
+    studentId: "0123456789",
+    program: "Undergraduate Degree (Fall 2020)",
+    plan: "Computer Science BS (Fall 2023)",
+    expectedGradTerm: "Fall 2025",
+    lastTermRegistered: "Fall 2025",
+    standing: "Good Standing",
+    overallGPA: "3.6",
+    csulbGPA: "3.3",
+    status: "On track with course work in progress",
+  };
+
   return (
-    <div>
-      <h1>Academy Requirement</h1>
-      <p>Add your academy requirement content here.</p>
-    </div>
+    <main className="min-h-screen bg-neutral-50">
+      {/* Page container */}
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <h1 className="mb-6 text-2xl font-semibold tracking-tight">My Progress</h1>
+
+        {/* 2-column layout */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
+          {/* LEFT: Info tab */}
+          <aside className="space-y-4">
+            <LeftInfoTab />
+          </aside>
+
+          {/* RIGHT: Dashboard */}
+          <section className="space-y-6">
+            <OverallProgress completed={progress.completed} total={progress.total} />
+            <CurrentAcademicInfo info={info} />
+
+            <DegreeChangeNotice
+              title="Computer Science B.S."
+              message="ENGR 101/ENGR 102/CECS 105 Waived for Transfer Students. Minimum Units changed from 97 to 94."
+              printLabel="Print Report"
+            />
+            {/* Add more right-side sections below as you build them */}
+          </section>
+        </div>
+      </div>
+    </main>
   );
 }
