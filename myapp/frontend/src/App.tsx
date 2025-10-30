@@ -11,7 +11,7 @@ import { ShoppingCartContext } from "./components/ShoppingCartContext";
 // No-sidebar layout (Home, AcademyRequirement)
 function RootLayout() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-neutral-50  dark:bg-gray-900">
       <main className="py-10">
         <div className="px-4 sm:px-6 lg:px-8">
           <Outlet />
