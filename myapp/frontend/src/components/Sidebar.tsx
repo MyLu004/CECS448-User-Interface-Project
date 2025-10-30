@@ -28,7 +28,7 @@ import {
   UsersIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import ShoppingCart from "./ShoppingCart";
+import ShoppingCart from "../pages/ShoppingCart";
 import ClassSearch from "../pages/ClassSearch";
 import ClassSchedule from "../pages/ClassSchedule";
 import { ShoppingCartContext } from "../ShoppingCartContext";
@@ -46,11 +46,18 @@ function classNames(...classes: string[]) {
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
+  // state select and change page for the sidebar
   const [selectPage, setSelectPage] = useState("#classSearch");
 
   const [shoppingCart, setShoppingCart] = useState(() => JSON.parse(localStorage.getItem("shoppingCart") ??  "[]"));
 
-  useEffect(() => localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart)));
+  //useEffect(() => localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart)));
+
+  // persist cart only when it changes
+  useEffect(() => {
+    localStorage.setItem("shoppingCart", JSON.stringify(shoppingCart));
+  }, [shoppingCart]);
 
   function switchPage(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
     e.preventDefault();
@@ -116,8 +123,9 @@ export default function Sidebar() {
                           <li key={item.name}>
                             <a
                               href={item.href}
+                              onClick={(e) => { switchPage(e, item.href); setSidebarOpen(false); }}
                               className={classNames(
-                                item.current
+                                item.href === selectPage
                                   ? "bg-gray-50 text-indigo-600 dark:bg-white/5 dark:text-white"
                                   : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white",
                                 "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold"
@@ -126,13 +134,18 @@ export default function Sidebar() {
                               <item.icon
                                 aria-hidden="true"
                                 className={classNames(
-                                  item.current
+                                  item.href === selectPage
                                     ? "text-indigo-600 dark:text-white"
                                     : "text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-white",
                                   "size-6 shrink-0"
                                 )}
                               />
                               {item.name}
+                              {item.href === "#shoppingCart" && (
+                                <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 inset-ring inset-ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-400/20">
+                                  {shoppingCart.length}
+                                </span>
+                              )}
                             </a>
                           </li>
                         ))}
