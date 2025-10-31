@@ -3,6 +3,8 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+import SharkPic from "../assets/sharkProfile.jpg"
+
 import {
   Dialog,
   DialogBackdrop,
@@ -186,11 +188,11 @@ export default function Sidebar() {
             >
               <img
                 alt=""
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src={SharkPic}
                 className="size-8 rounded-full bg-gray-50 dark:bg-gray-800"
               />
               <span className="sr-only">Your profile</span>
-              <span aria-hidden="true">Tom Cook</span>
+              <span aria-hidden="true">Shark CSULB</span>
             </a>
           </div>
         </div>

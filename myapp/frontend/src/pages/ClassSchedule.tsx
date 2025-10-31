@@ -221,7 +221,7 @@ export default function ClassSchedule() {
 
 
           <section className="mt-10 rounded-xl border border-neutral-200 bg-white shadow-sm">
-        <div className="border-b bg-neutral-50 px-4 py-2 text-sm font-semibold">
+        <div className="border-b text-center bg-neutral-50 px-4 py-2 text-sm font-semibold">
           Weekly Schedule
         </div>
 

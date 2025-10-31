@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Header / hero */}
-      <div className="bg-[#EBA91B] from-amber-500 to-amber-600 text-white">
+      <div className="bg-[#EBA91B] from-amber-500 to-amber-600 text-white border rounded-3xl">
         <div className="mx-auto max-w-6xl px-6 py-10">
           <p className="text-xs/5 uppercase tracking-widest text-white/90">
             CECS 448 • Fall 2025
@@ -47,8 +47,8 @@ export default function Home() {
       <div className="mx-auto max-w-6xl px-6 py-8">
         {/* Resources card */}
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Resources</h2>
+          <div className="flex items-center justify-center">
+            <h2 className="text-xl font-semibold">Resources</h2>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
