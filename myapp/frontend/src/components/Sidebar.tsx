@@ -25,11 +25,16 @@ const nav = [
   { name: "Class Schedule", to: "class-schedule", icon: CalendarDaysIcon },
 ];
 
-function cx(...c) { return c.filter(Boolean).join(" "); }
+
+
+const cx = (...c: Array<string | false | null | undefined>) =>
+  c.filter((v): v is string => Boolean(v)).join(" ");
 
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { shoppingCart } = useContext(ShoppingCartContext);
+
+  
 
   const navigate = useNavigate();
 

@@ -4,6 +4,8 @@
 import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
+import type { ReactNode } from "react";
+
 
 /* ---- Tiny inline SVGs so you don't need more deps ---- */
 
@@ -48,7 +50,7 @@ const WhatIfQ = ({ className = "h-5 w-5" }) => (
 
 /* ---- Data (icon + label) ---- */
 
-type Item = { icon: JSX.Element; label: string };
+type Item = { icon: ReactNode; label: string };
 
 const DEGREE_AUDIT: Item[] = [
   { icon: <CheckCircleIcon className="h-5 w-5 text-green-600" />, label: "Requirement Met" },

@@ -1,7 +1,7 @@
 import {
   Button,
 } from "@headlessui/react";
-import { ChevronDownIcon, CheckCircleIcon } from "@heroicons/react/16/solid";
+import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { useContext } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
 
@@ -10,7 +10,7 @@ import { ShoppingCartContext } from "../components/ShoppingCartContext";
 export default function ShoppingCart() {
   const {shoppingCart, setShoppingCart} = useContext(ShoppingCartContext);
 
-  const totalUnits = shoppingCart.reduce((sum, c) => sum + (Number(c.units) || 0), 0);
+  //const totalUnits = shoppingCart.reduce((sum, c) => sum + (Number(c.units) || 0), 0);
 
 
   const deleteItem = (clazz: string) => {

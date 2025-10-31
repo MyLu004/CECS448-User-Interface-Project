@@ -8,10 +8,10 @@ type Props = {
   message: string;
   /** Optional small link in the top-right */
   printLabel?: string;
-  onPrintClick?: () => void;
+  // onPrintClick?: () => void;
 };
 
-export default function DegreeChangeNotice({ title, message, printLabel = "Print Report", onPrintClick }: Props) {
+export default function DegreeChangeNotice({ title, message, printLabel = "Print Report" }: Props) {
   return (
     <div className="rounded-xl border shadow-sm">
       <div className="flex items-center justify-between bg-[#EBA91B] border-b rounded-t-xl border-t-xl border-neutral-200 px-4 py-3">

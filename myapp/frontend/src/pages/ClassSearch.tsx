@@ -10,7 +10,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
 } from "@heroicons/react/16/solid";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
 
 
@@ -23,13 +23,14 @@ import { SelectField } from "../components/SelectField";
 
 import {
   COURSE_NUMBER_QUERY_OPS,
-  type NumberQueryOp,
+  // type NumberQueryOp,
   CAREERS,
   type Career,
   MODES,
   type Mode,
 } from "../../constants/select-option";
 
+type CourseRow = Course["classes"][number];
 
 export default function ClassSearch() {
   
@@ -122,7 +123,7 @@ function runSearch() {
 function selectCourse(
     e: React.MouseEvent<HTMLAnchorElement>,
     courseName: string,
-    course
+    course: CourseRow
   ) {
     e.preventDefault();
     setShoppingCart([
