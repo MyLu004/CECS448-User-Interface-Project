@@ -10,7 +10,7 @@ export default function LeftInfoTab() {
     <div className="space-y-4">
       <ViewReport />
       <SectionLinks />
-      {/* <IconBook /> */}
+      <IconBook />
     </div>
   );
 }

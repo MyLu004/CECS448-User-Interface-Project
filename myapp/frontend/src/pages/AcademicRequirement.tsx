@@ -3,11 +3,17 @@
 
 import { useNavigate } from "react-router-dom";
 
-
+// LEFT SIDE INFO: section and link
 import LeftInfoTab from "../components/LeftInfoTab"
+
+
+// RIGHT SIDE INFO: academic 
 import OverallProgress from "../components/academics/OverallProgress";
 import CurrentAcademicInfo from "../components/academics/CurrentAcademicInfo";
 import DegreeChangeNotice from "../components/academics/DegreeChangeNotice";
+
+import RequirementGroup from "../components/academics/RequirementGroup";
+import LowerDivisionCourses from "../components/academics/LowerDivisionCourse";
 
 export default function AcademicRequirementsPage() {
 
@@ -15,7 +21,7 @@ export default function AcademicRequirementsPage() {
   // const state for the navigation
     const navigate = useNavigate();
 
-
+  // todo: migrate it into the different .ts (maybe)
   // mock data – wire to real data later
   const progress = { completed: 80, total: 120 };
   const info = {
@@ -60,17 +66,19 @@ export default function AcademicRequirementsPage() {
             <LeftInfoTab />
           </aside>
 
-          {/* RIGHT: Dashboard */}
+          {/* RIGHT: Dashboard, inclduing multiple component for the academy*/}
           <section className="space-y-6">
             <OverallProgress completed={progress.completed} total={progress.total} />
             <CurrentAcademicInfo info={info} />
 
             <DegreeChangeNotice
               title="Computer Science B.S."
-              message="ENGR 101/ENGR 102/CECS 105 Waived for Transfer Students. Minimum Units changed from 97 to 94."
+              message="ENGR 101/ENGR 102/CECS 105 Waived for Transfer Students."
               printLabel="Print Report"
             />
             {/* Add more right-side sections below as you build them */}
+            <RequirementGroup />
+            <LowerDivisionCourses />
           </section>
         </div>
       </div>
