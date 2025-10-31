@@ -2,6 +2,16 @@
 "use client";
 
 import { useContext, useMemo } from "react";
+//import FullCalendar from "@fullcalendar/react";
+
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+
+// import "@fullcalendar/core/index.css";
+// import "@fullcalendar/timegrid/index.css";
+
+
 import CheckCircleIcon from "@heroicons/react/16/solid/CheckCircleIcon";
 import XCircleIcon from "@heroicons/react/16/solid/XCircleIcon";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
@@ -9,6 +19,92 @@ import { ShoppingCartContext } from "../components/ShoppingCartContext";
 // (optional) if you have a CartItem type, import it from the context/types
 // type CartItem = { name: string; class: string; section: string; times: string; room: string;
 //   instructor: string; dates: string; status: boolean; units: number };
+const DAY_TOKENS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+
+
+function startOfWeek(d = new Date()) {
+  // make Monday = day 0
+  const day = (d.getDay() + 6) % 7; // 0..6 (Mon..Sun)
+  const out = new Date(d);
+  out.setHours(0, 0, 0, 0);
+  out.setDate(out.getDate() - day);
+  return out;
+}
+
+
+function toMinutes(time: string) {
+  // "6:30PM" or "12:05 AM" -> minutes
+  const m = time.trim().match(/^(\d{1,2}):(\d{2})\s*([AP]M)$/i);
+  if (!m) return NaN;
+  let h = parseInt(m[1], 10);
+  const min = parseInt(m[2], 10);
+  const isPM = m[3].toUpperCase() === "PM";
+  if (h === 12) h = isPM ? 12 : 0;
+  else if (isPM) h += 12;
+  return h * 60 + min;
+}
+
+function parseDays(tokenStr: string): number[] {
+  // returns indices 0..6 (Mon..Sun)
+  const days: number[] = [];
+  let s = tokenStr.trim();
+  while (s.length >= 2) {
+    const t = s.slice(0, 2) as (typeof DAY_TOKENS)[number];
+    const i = DAY_TOKENS.indexOf(t);
+    if (i >= 0) {
+      days.push(i);
+      s = s.slice(2);
+    } else break;
+  }
+  return days;
+}
+
+function buildEventsFromCart(
+  cart: Array<{
+    name: string;
+    room: string;
+    times: string; // e.g., "MoWe 12:30PM - 1:45PM"
+  }>,
+  weekAnchor = new Date()
+) {
+  const week0 = startOfWeek(weekAnchor); // Monday 00:00
+  const events: { title: string; start: Date; end: Date; extendedProps?: any }[] = [];
+
+  for (const item of cart) {
+    const m =
+      item.times &&
+      item.times.match(
+        /^([A-Za-z]{2,10})\s+(\d{1,2}:\d{2}\s*[AP]M)\s*-\s*(\d{1,2}:\d{2}\s*[AP]M)$/i
+      );
+    if (!m) continue;
+
+    const [_, dayStr, startRaw, endRaw] = m;
+    const startMin = toMinutes(startRaw.replace(/\s+/g, "").toUpperCase());
+    const endMin = toMinutes(endRaw.replace(/\s+/g, "").toUpperCase());
+    const days = parseDays(dayStr);
+
+    for (const d of days) {
+      const start = new Date(week0);
+      start.setDate(week0.getDate() + d);
+      start.setHours(0, 0, 0, 0);
+      start.setMinutes(startMin);
+
+      const end = new Date(week0);
+      end.setDate(week0.getDate() + d);
+      end.setHours(0, 0, 0, 0);
+      end.setMinutes(endMin);
+
+      events.push({
+        title: item.name,
+        start,
+        end,
+        extendedProps: { room: item.room, timeLabel: `${startRaw} - ${endRaw}` },
+      });
+    }
+  }
+
+  return events;
+}
 
 export default function ClassSchedule() {
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
@@ -23,6 +119,9 @@ export default function ClassSchedule() {
   const removeFromCart = (clazz: string) => {
     setShoppingCart(shoppingCart.filter((c) => c.class !== clazz));
   };
+
+  const fcEvents = useMemo(() => buildEventsFromCart(shoppingCart as any), [shoppingCart]);
+
 
   return (
     <div>
@@ -119,6 +218,50 @@ export default function ClassSchedule() {
               </div>
             </div>
           </div>
+
+
+          <section className="mt-10 rounded-xl border border-neutral-200 bg-white shadow-sm">
+        <div className="border-b bg-neutral-50 px-4 py-2 text-sm font-semibold">
+          Weekly Schedule
+        </div>
+
+        <FullCalendar
+          plugins={[timeGridPlugin, interactionPlugin]}
+          initialView="timeGridWeek"
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "timeGridWeek,timeGridDay",
+          }}
+          slotMinTime="08:00:00"
+          slotMaxTime="22:00:00"
+          allDaySlot={false}
+          nowIndicator
+          height="auto"
+          events={fcEvents}
+          eventOverlap
+          eventTimeFormat={{ hour: "numeric", minute: "2-digit", meridiem: "short" }}
+          dayHeaderFormat={{ weekday: "short" }}
+          eventContent={(arg) => {
+            // custom render: title + room + time
+            const { room, timeLabel } = arg.event.extendedProps as any;
+            return {
+              domNodes: [
+                (() => {
+                  const wrap = document.createElement("div");
+                  wrap.className = "fc-custom-event";
+                  wrap.innerHTML = `
+                    <div class="font-medium">${arg.event.title}</div>
+                    ${room ? `<div class="text-[11px] opacity-80">${room}</div>` : ""}
+                    <div class="text-[11px] opacity-70">${timeLabel ?? ""}</div>
+                  `;
+                  return wrap;
+                })(),
+              ],
+            };
+          }}
+        />
+      </section>
         </>
       )}
     </div>
