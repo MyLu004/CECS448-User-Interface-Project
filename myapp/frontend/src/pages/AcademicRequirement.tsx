@@ -3,6 +3,11 @@
 
 import { useNavigate } from "react-router-dom";
 
+//ACADEMIC CONTEXT TO SHARE THE UI SIGNAL BETWEEN THE FILES
+import { AcademicsUIProvider } from "../components/academics/AcademicsUIContext";
+
+
+
 // LEFT SIDE INFO: section and link
 import LeftInfoTab from "../components/LeftInfoTab"
 
@@ -60,6 +65,7 @@ export default function AcademicRequirementsPage() {
         
 
         {/* 2-column layout */}
+        <AcademicsUIProvider>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
           {/* LEFT: Info tab */}
           <aside className="space-y-4">
@@ -81,6 +87,7 @@ export default function AcademicRequirementsPage() {
             <LowerDivisionCourses />
           </section>
         </div>
+        </AcademicsUIProvider>
       </div>
     </main>
   );

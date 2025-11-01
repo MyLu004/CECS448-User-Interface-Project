@@ -1,12 +1,8 @@
-// components/academics/LowerDivisionCourses.tsx
 "use client";
 
-import { useMemo, useState } from "react";
-import {
-  CheckCircleIcon,
-  ChevronDownIcon,
-  ArrowUturnLeftIcon,
-} from "@heroicons/react/24/solid";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { CheckCircleIcon, ChevronDownIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
+import { AcademicsUIContext } from "../academics/AcademicsUIContext";
 
 export type LowerDivisionItem = {
   course: string;
@@ -24,11 +20,11 @@ const LOWER_DIVISION_ITEMS: LowerDivisionItem[] = [
 ];
 
 const UNITS_REQUIRED = 26;
-
-//hard-code which course groups should show the right-side check
 const SATISFIED_GROUPS = new Set(["CECS 174", "CECS 274", "CECS 277"]);
 
 export default function LowerDivisionCourses() {
+  const { lowerDivisionOpenAllTick } = useContext(AcademicsUIContext);
+
   const groups = useMemo(() => {
     const m = new Map<string, LowerDivisionItem[]>();
     for (const row of LOWER_DIVISION_ITEMS) {
@@ -41,6 +37,11 @@ export default function LowerDivisionCourses() {
   const [open, setOpen] = useState<Record<string, boolean>>(
     Object.fromEntries(groups.map(([k]) => [k, true]))
   );
+
+  // Expand every group whenever ViewReport says "open all"
+  useEffect(() => {
+    setOpen(Object.fromEntries(groups.map(([k]) => [k, true])));
+  }, [lowerDivisionOpenAllTick, groups]);
 
   const completedUnits = useMemo(
     () => LOWER_DIVISION_ITEMS.reduce((sum, r) => sum + (r.grade && r.grade !== "W" ? r.units : 0), 0),
@@ -66,7 +67,7 @@ export default function LowerDivisionCourses() {
       <div className="space-y-2 px-3 pb-4">
         {groups.map(([course, rows]) => {
           const isOpen = !!open[course];
-          const satisfied = SATISFIED_GROUPS.has(course); // ← right-side check toggle
+          const satisfied = SATISFIED_GROUPS.has(course);
 
           return (
             <div key={course} className="rounded-xl bg-neutral-100">
@@ -75,17 +76,15 @@ export default function LowerDivisionCourses() {
                 onClick={() => setOpen((s) => ({ ...s, [course]: !s[course] }))}
                 className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left"
               >
-                {/* left side: arrow + label */}
                 <div className="flex items-center gap-2">
                   <ChevronDownIcon className={`size-5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                   <span className="font-medium">{course}</span>
                 </div>
 
-                {/* right side: green check if satisfied */}
                 {satisfied ? (
                   <CheckCircleIcon className="size-5 text-green-600" aria-label="satisfied" />
                 ) : (
-                  <span className="size-5" aria-hidden /> // keeps spacing consistent when not satisfied
+                  <span className="size-5" aria-hidden />
                 )}
               </button>
 
