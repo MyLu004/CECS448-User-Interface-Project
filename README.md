@@ -1,9 +1,18 @@
 # 🏫 CECS 448 – Student Portal Redesign (Enrollment & Academic Requirements)
 
+- [Figma Design](https://www.figma.com/design/BalN3zCiaa0U5G0PXvdGzY/Academic-Requirements?node-id=0-1&p=f  )
+- [Website](https://cecs-448-user-interface-project.vercel.app/)
+- [Presentation Slide](https://drive.google.com/file/d/1jFtTiXJE2z-_C61KfDN6uuzTIzMhV7dl/view?usp=sharing)
+
+
+
+
 ## 📖 Project Description
 
 This project is the second phase of our usability improvement study for the **Student Center interface**.  
 In a team of up to five members, we redesigned and implemented a **functional prototype** to address usability issues identified in **Project 1**.  
+
+![Screenshot of the homepage project](/homePage448.png)
 
 Our goal was to **fix and enhance** the following sections of the student website:
 
