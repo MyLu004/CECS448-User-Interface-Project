@@ -29,6 +29,7 @@ import {
   MODES,
   type Mode,
 } from "../../constants/select-option";
+import { ClassScheduleContext } from "../components/ClassScheduleContext";
 
 type CourseRow = Course["classes"][number];
 
@@ -91,6 +92,7 @@ export default function ClassSearch() {
   });
 
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
+  const { classSchedule } = useContext(ClassScheduleContext);
 
 
   useEffect(() => setLS("subject", subject), [subject]);
@@ -142,8 +144,13 @@ function selectCourse(
     ]);
   }
 
-  function isAddedToCart(clazz: string): boolean {
+  function isEnrolledOrAddedToCart(clazz: string): boolean {
     for (let item of shoppingCart) {
+      if (item.class === clazz) {
+        return true;
+      }
+    }
+    for (let item of classSchedule) {
       if (item.class === clazz) {
         return true;
       }
@@ -405,7 +412,7 @@ function onSubmit(e: React.FormEvent<HTMLFormElement>) {
                             />
                           </td>
                           <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3">
-                            {isAddedToCart(clazz.class) ? (
+                            {isEnrolledOrAddedToCart(clazz.class) ? (
                               <CheckIcon className="size-6 text-green-500" />
                             ) : (
                               <a

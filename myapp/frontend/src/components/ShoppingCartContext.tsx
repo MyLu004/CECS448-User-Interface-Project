@@ -23,6 +23,8 @@ export const ShoppingCartContext = createContext<ShoppingCartCtx>({
   setShoppingCart: () => {},
 });
 
+
+
 // ✅ Provider that owns the state + localStorage sync
 export function ShoppingCartProvider({ children }: { children: React.ReactNode }) {
   const [shoppingCart, setShoppingCart] = useState<CartItem[]>(() => {

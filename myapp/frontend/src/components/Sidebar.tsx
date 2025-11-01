@@ -20,6 +20,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 import { ShoppingCartContext } from "./ShoppingCartContext";
+import { ClassScheduleContext } from "./ClassScheduleContext";
 
 const nav = [
   { name: "Class Search", to: "class-search", icon: MagnifyingGlassIcon },
@@ -35,8 +36,7 @@ const cx = (...c: Array<string | false | null | undefined>) =>
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { shoppingCart } = useContext(ShoppingCartContext);
-
-  
+  const { classSchedule } = useContext(ClassScheduleContext);
 
   const navigate = useNavigate();
 
@@ -163,6 +163,11 @@ export default function Sidebar() {
                     {item.to === "shopping-cart" && (
                       <span className="ml-auto inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 inset-ring inset-ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-400/20">
                         {shoppingCart?.length ?? 0}
+                      </span>
+                    )}
+                    {item.to === "class-schedule" && (
+                      <span className="ml-auto inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/10 dark:bg-green-400/10 dark:text-green-400 dark:inset-ring-green-400/20">
+                        {classSchedule?.length ?? 0}
                       </span>
                     )}
                   </NavLink>

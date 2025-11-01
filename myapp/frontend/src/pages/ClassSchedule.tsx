@@ -15,6 +15,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import CheckCircleIcon from "@heroicons/react/16/solid/CheckCircleIcon";
 import XCircleIcon from "@heroicons/react/16/solid/XCircleIcon";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
+import { ClassScheduleContext } from "../components/ClassScheduleContext";
 
 // (optional) if you have a CartItem type, import it from the context/types
 // type CartItem = { name: string; class: string; section: string; times: string; room: string;
@@ -108,6 +109,7 @@ function buildEventsFromCart(
 
 export default function ClassSchedule() {
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
+  const { classSchedule, setClassSchedule } = useContext(ClassScheduleContext);
 
   // optional: compute total units
   const totalUnits = useMemo(
@@ -116,8 +118,8 @@ export default function ClassSchedule() {
   );
 
   // optional: remove item handler
-  const removeFromCart = (clazz: string) => {
-    setShoppingCart(shoppingCart.filter((c) => c.class !== clazz));
+  const removeFromClassSchedule = (clazz: string) => {
+    setClassSchedule(classSchedule.filter((c) => c.class !== clazz));
   };
 
   const fcEvents = useMemo(() => buildEventsFromCart(shoppingCart as any), [shoppingCart]);
@@ -129,9 +131,9 @@ export default function ClassSchedule() {
         Fall 2025 Shopping Cart
       </h2>
 
-      {shoppingCart.length === 0 ? (
+      {classSchedule.length === 0 ? (
         <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-          Your cart is empty. Add classes from the search page.
+          Your schedule is empty. Enroll classes from the shopping cart.
         </p>
       ) : (
         <>
@@ -170,7 +172,7 @@ export default function ClassSchedule() {
                   </thead>
 
                   <tbody className="bg-white dark:bg-gray-900">
-                    {shoppingCart.map((section) => (
+                    {classSchedule.map((section) => (
                       <tr key={section.class} className="even:bg-gray-50 dark:even:bg-gray-800/50">
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-700 dark:text-gray-300">
                           {section.name} ({section.class})
@@ -204,7 +206,7 @@ export default function ClassSchedule() {
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-right">
                           <button
-                            onClick={() => removeFromCart(section.class)}
+                            onClick={() => removeFromClassSchedule(section.class)}
                             className="rounded-lg px-5 py-2 bg-red-500 text-white"
                           >
                             DELETE

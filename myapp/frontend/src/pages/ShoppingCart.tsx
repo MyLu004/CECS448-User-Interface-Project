@@ -1,10 +1,13 @@
 import { Button } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
-import { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
+import { ClassScheduleContext, type ClassScheduleItem } from "../components/ClassScheduleContext";
+import ClassSchedule from "./ClassSchedule";
 
 export default function ShoppingCart() {
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
+  const { classSchedule, setClassSchedule } = useContext(ClassScheduleContext);
 
   const totalUnits = useMemo(
     () => shoppingCart.reduce((sum, c) => sum + (Number(c.units) || 0), 0),
@@ -17,7 +20,8 @@ export default function ShoppingCart() {
   const deleteItem = (clazz: string) =>
     setShoppingCart(shoppingCart.filter((c) => c.class !== clazz));
 
-  async function submitEnrollment() {
+  async function submitEnrollment(e:React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
     setSuccessMsg(null);
     setEnrolling(true);
     try {
@@ -28,6 +32,19 @@ export default function ShoppingCart() {
       const units = totalUnits;
 
       // TODO: send to your API here. For now we clear the cart.
+      setClassSchedule(shoppingCart.map<ClassScheduleItem>(item => {
+        return {
+          name: item.name,
+          class: item.class,
+          section: item.section,
+          times: item.times,
+          room: item.room,
+          instructor: item.instructor,
+          dates: item.dates,
+          status: item.status,
+          units: item.units   
+        }
+      }))
       setShoppingCart([]);
       setSuccessMsg(
         `Enrollment submitted for ${classCount} class${classCount === 1 ? "" : "es"} (${units} unit${units === 1 ? "" : "s"}).`
