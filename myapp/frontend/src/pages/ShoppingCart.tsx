@@ -1,7 +1,23 @@
+// ShoppingCart.tsx
 import { Button } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { useContext, useMemo, useState } from "react";
 import { ShoppingCartContext } from "../components/ShoppingCartContext";
+import type { CartItem } from "../components/ShoppingCartContext";
+
+function readEnrolled(): CartItem[] {
+  try {
+    return JSON.parse(localStorage.getItem("enrolled") ?? "[]");
+  } catch {
+    return [];
+  }
+}
+
+function dedupeByClass(list: CartItem[]): CartItem[] {
+  const map = new Map<string, CartItem>();
+  for (const item of list) map.set(item.class, item);
+  return Array.from(map.values());
+}
 
 export default function ShoppingCart() {
   const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
@@ -24,10 +40,15 @@ export default function ShoppingCart() {
       // simulate server request
       await new Promise((r) => setTimeout(r, 900));
 
+      // 1) merge cart into "enrolled"
+      const existing = readEnrolled();
+      const merged = dedupeByClass([...existing, ...shoppingCart]);
+      localStorage.setItem("enrolled", JSON.stringify(merged));
+
+      // 2) compute summary, clear cart, show message
       const classCount = shoppingCart.length;
       const units = totalUnits;
 
-      // TODO: send to your API here. For now we clear the cart.
       setShoppingCart([]);
       setSuccessMsg(
         `Enrollment submitted for ${classCount} class${classCount === 1 ? "" : "es"} (${units} unit${units === 1 ? "" : "s"}).`
@@ -43,7 +64,6 @@ export default function ShoppingCart() {
         Fall 2025 Shopping Cart
       </h2>
 
-      {/* success banner */}
       {successMsg && (
         <div className="mt-3 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm text-green-800">
           {successMsg}
@@ -56,21 +76,12 @@ export default function ShoppingCart() {
         </div>
       ) : (
         <>
-          {/* toolbar: total + submit */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm text-gray-700 dark:text-gray-300">
               <span className="font-medium">{shoppingCart.length}</span> item
               {shoppingCart.length === 1 ? "" : "s"} •{" "}
               <span className="font-medium">{totalUnits}</span> total units
             </div>
-
-            {/* <Button
-              onClick={submitEnrollment}
-              disabled={!shoppingCart.length || enrolling}
-              className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {enrolling ? "Submitting..." : "Submit Enrollment"}
-            </Button> */}
           </div>
 
           <div className="mt-6 flow-root">
@@ -137,7 +148,6 @@ export default function ShoppingCart() {
                   </tbody>
                 </table>
 
-                {/* bottom submit button (duplicate for long tables) */}
                 <div className="mt-6 flex items-center justify-end">
                   <Button
                     onClick={submitEnrollment}

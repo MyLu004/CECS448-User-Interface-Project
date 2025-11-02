@@ -1,36 +1,27 @@
-// app/schedule/ClassSchedule.tsx (or wherever you place it)
+// pages/ClassSchedule.tsx
 "use client";
 
-import { useContext, useMemo } from "react";
-//import FullCalendar from "@fullcalendar/react";
+import { useEffect, useMemo, useState } from "react";
+import type { CartItem } from "../components/ShoppingCartContext";
 
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
+// FullCalendar v6 CSS:
 // import "@fullcalendar/core/index.css";
 // import "@fullcalendar/timegrid/index.css";
 
-
-import CheckCircleIcon from "@heroicons/react/16/solid/CheckCircleIcon";
-import XCircleIcon from "@heroicons/react/16/solid/XCircleIcon";
-import { ShoppingCartContext } from "../components/ShoppingCartContext";
-
-// (optional) if you have a CartItem type, import it from the context/types
-// type CartItem = { name: string; class: string; section: string; times: string; room: string;
-//   instructor: string; dates: string; status: boolean; units: number };
 const DAY_TOKENS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
 
-
 function startOfWeek(d = new Date()) {
-  // make Monday = day 0
+  // Monday = 0
   const day = (d.getDay() + 6) % 7; // 0..6 (Mon..Sun)
   const out = new Date(d);
   out.setHours(0, 0, 0, 0);
   out.setDate(out.getDate() - day);
   return out;
 }
-
 
 function toMinutes(time: string) {
   // "6:30PM" or "12:05 AM" -> minutes
@@ -107,162 +98,164 @@ function buildEventsFromCart(
 }
 
 export default function ClassSchedule() {
-  const { shoppingCart, setShoppingCart } = useContext(ShoppingCartContext);
+  const [enrolled, setEnrolled] = useState<CartItem[]>([]);
+  // The calendar's “current” week anchor; updated when the user navigates
+  const [weekAnchor, setWeekAnchor] = useState<Date>(new Date());
 
-  // optional: compute total units
-  const totalUnits = useMemo(
-    () => shoppingCart.reduce((sum, c) => sum + (Number(c.units) || 0), 0),
-    [shoppingCart]
+  // Recompute events whenever enrolled list or viewed week changes
+  const fcEvents = useMemo(
+    () =>
+      buildEventsFromCart(
+        enrolled.map((e) => ({ name: e.name, room: e.room, times: e.times })),
+        weekAnchor
+      ),
+    [enrolled, weekAnchor]
   );
 
-  // optional: remove item handler
-  const removeFromCart = (clazz: string) => {
-    setShoppingCart(shoppingCart.filter((c) => c.class !== clazz));
-  };
+  useEffect(() => {
+    // initial load
+    try {
+      const data = JSON.parse(localStorage.getItem("enrolled") ?? "[]");
+      setEnrolled(Array.isArray(data) ? data : []);
+    } catch {
+      setEnrolled([]);
+    }
 
-  const fcEvents = useMemo(() => buildEventsFromCart(shoppingCart as any), [shoppingCart]);
-
+    // keep fresh if user enrolls and navigates back
+    const onFocus = () => {
+      try {
+        const data = JSON.parse(localStorage.getItem("enrolled") ?? "[]");
+        setEnrolled(Array.isArray(data) ? data : []);
+      } catch {
+        /* noop */
+      }
+    };
+    document.addEventListener("visibilitychange", onFocus);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      document.removeEventListener("visibilitychange", onFocus);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
 
   return (
     <div>
       <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">
-        Fall 2025 Shopping Cart
+        My Class Schedule
       </h2>
 
-      {shoppingCart.length === 0 ? (
-        <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-          Your cart is empty. Add classes from the search page.
-        </p>
+      {enrolled.length === 0 ? (
+        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+          No enrolled classes yet. Submit from your Shopping Cart to add classes here.
+        </div>
       ) : (
-        <>
-          <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Total units: <span className="font-medium">{totalUnits}</span>
-          </div>
+        <div className="mt-6 flow-root">
+          <div className="-mx-4 -my-2 mb-10 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                <thead>
+                  <tr>
+                    <th className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-3 dark:text-white">
+                      CLASS
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      NAME
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      DAYS & TIMES
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      ROOM
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      INSTRUCTOR
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      UNITS
+                    </th>
+                    <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      STATUS
+                    </th>
+                  </tr>
+                </thead>
 
-          <div className="mt-8 flow-root">
-            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
-                  <thead>
-                    <tr>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        CLASS
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        DAYS & TIMES
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        ROOM
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        INSTRUCTOR
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        UNITS
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        STATUS
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 dark:text-white">
-                        ACTION
-                      </th>
+                <tbody className="bg-white dark:bg-gray-900">
+                  {enrolled.map((s) => (
+                    <tr key={s.class} className="even:bg-gray-50 dark:even:bg-gray-800/50">
+                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3 dark:text-white">
+                        {s.class}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {s.name}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {s.times}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {s.room}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {s.instructor}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {s.units}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        Enrolled
+                      </td>
                     </tr>
-                  </thead>
-
-                  <tbody className="bg-white dark:bg-gray-900">
-                    {shoppingCart.map((section) => (
-                      <tr key={section.class} className="even:bg-gray-50 dark:even:bg-gray-800/50">
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-700 dark:text-gray-300">
-                          {section.name} ({section.class})
-                          {/* <div className="text-xs text-gray-500 dark:text-gray-400">{section.section}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{section.dates}</div> */}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.times}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.room}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                          {section.instructor}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-700 dark:text-gray-300">
-                          {section.units}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap">
-                          {section.status ? (
-                            <div className="flex items-center justify-center text-green-700">
-                              <CheckCircleIcon aria-hidden="true" className="size-5" />
-                              {/* <span className="sr-only sm:not-sr-only sm:text-gray-700 dark:sm:text-gray-300">Open</span> */}
-                            </div>
-                          ) : (
-                            <div className="inline-flex items-center gap-1 text-red-600">
-                              <XCircleIcon aria-hidden="true" className="size-5" />
-                              <span className="sr-only sm:not-sr-only sm:text-gray-700 dark:sm:text-gray-300">Closed</span>
-                            </div>
-                          )}
-                        </td>
-                        <td className="px-3 py-4 text-sm whitespace-nowrap text-right">
-                          <button
-                            onClick={() => removeFromCart(section.class)}
-                            className="rounded-lg px-5 py-2 bg-red-500 text-white"
-                          >
-                            DELETE
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
+         
 
-          <section className="mt-10 rounded-xl border border-neutral-200 bg-white shadow-sm">
-        <div className="border-b text-center bg-neutral-50 px-4 py-2 text-sm font-semibold">
-          Weekly Schedule
+          <FullCalendar
+            
+            plugins={[timeGridPlugin, interactionPlugin]}
+            initialView="timeGridWeek"
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "timeGridWeek,timeGridDay",
+            }}
+            firstDay={1} // Monday
+            slotMinTime="08:00:00"
+            slotMaxTime="22:00:00"
+            allDaySlot={false}
+            nowIndicator
+            height="auto"
+            events={fcEvents}
+            eventOverlap
+            eventTimeFormat={{ hour: "numeric", minute: "2-digit", meridiem: "short" }}
+            dayHeaderFormat={{ weekday: "short" }}
+            datesSet={(arg) => {
+              // keep events aligned to the week being viewed
+              // arg.start is the start of the current view range
+              setWeekAnchor(arg.start);
+            }}
+            eventContent={(arg) => {
+              // custom render: title + room + time
+              const { room, timeLabel } = arg.event.extendedProps as any;
+              return {
+                domNodes: [
+                  (() => {
+                    const wrap = document.createElement("div");
+                    wrap.className = "fc-custom-event";
+                    wrap.innerHTML = `
+                      <div class="font-medium">${arg.event.title}</div>
+                      ${room ? `<div class="text-[11px] opacity-80">${room}</div>` : ""}
+                      <div class="text-[11px] opacity-70">${timeLabel ?? ""}</div>
+                    `;
+                    return wrap;
+                  })(),
+                ],
+              };
+            }}
+          />
         </div>
-
-        <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "timeGridWeek,timeGridDay",
-          }}
-          slotMinTime="08:00:00"
-          slotMaxTime="22:00:00"
-          allDaySlot={false}
-          nowIndicator
-          height="auto"
-          events={fcEvents}
-          eventOverlap
-          eventTimeFormat={{ hour: "numeric", minute: "2-digit", meridiem: "short" }}
-          dayHeaderFormat={{ weekday: "short" }}
-          eventContent={(arg) => {
-            // custom render: title + room + time
-            const { room, timeLabel } = arg.event.extendedProps as any;
-            return {
-              domNodes: [
-                (() => {
-                  const wrap = document.createElement("div");
-                  wrap.className = "fc-custom-event";
-                  wrap.innerHTML = `
-                    <div class="font-medium">${arg.event.title}</div>
-                    ${room ? `<div class="text-[11px] opacity-80">${room}</div>` : ""}
-                    <div class="text-[11px] opacity-70">${timeLabel ?? ""}</div>
-                  `;
-                  return wrap;
-                })(),
-              ],
-            };
-          }}
-        />
-      </section>
-        </>
       )}
     </div>
   );
