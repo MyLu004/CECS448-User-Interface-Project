@@ -64,7 +64,7 @@ export default function AcademicRequirementsPage() {
               {/* ONE WRAPPER: Computer Science B.S. */}
               <section className="rounded-lg border border-neutral-200 bg-white shadow-sm">
                 <div className="flex items-center justify-between rounded-t-lg bg-[var(--brand-gold,#EBA91B)] px-4 py-2 text-black">
-                  <h2 className="font-semibold">Computer Science B.S.</h2>
+                  <h2 className="text-sm font-semibold">Computer Science B.S.</h2>
                   <button
                     className="text-sm text-blue-700 underline underline-offset-2 hover:text-blue-800 cursor-pointer"
                   >

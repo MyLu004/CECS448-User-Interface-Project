@@ -32,7 +32,7 @@ const ITEMS: Item[] = [
       <div className="rounded-xl bg-neutral-100 p-3 text-sm text-neutral-800">
         <p className="font-medium">1 Course/C or Better Grade Required</p>
         <ul className="mt-1 list-disc pl-5">
-          <li>• Satisfied: WAIVED FOR TRANSFER STUDENTS</li>
+          <li> Satisfied: WAIVED FOR TRANSFER STUDENTS</li>
         </ul>
       </div>
     ),
