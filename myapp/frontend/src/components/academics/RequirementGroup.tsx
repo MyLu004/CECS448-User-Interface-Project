@@ -47,7 +47,7 @@ export default function RequirementGroup() {
   return (
     <section className="rounded-xl border border-neutral-300 bg-white shadow-sm">
       {/* Header: gold bar + overall state icon */}
-      <div className="flex items-center justify-between rounded-t-xl bg-[#EBA91B] px-4 py-2 text-sm font-semibold">
+      <div className="flex items-center justify-between rounded-t-xl bg-[#EBA91B] px-4 py-2 text-base font-semibold">
         <span>ENGR 101/ENGR 102/CECS 105</span>
         <span className="inline-flex items-center gap-1">
           {anyInProgress ? (

@@ -39,7 +39,7 @@ export default function GEAreaCard({
     return (
         <section className="rounded-lg border border-neutral-200 bg-white shadow-sm">
             <div className="flex items-center justify-between rounded-t-lg bg-[#EBA91B] px-4 py-2 text-black">
-                <h3 className="text-sm font-semibold">{areaTitle}</h3>
+                <h3 className="text-base font-semibold">{areaTitle}</h3>
                 <div className="flex items-center gap-1">
                     {anyInProgress ? (
                         <DiamondIP className="h-5 w-5 text-amber-700" />
@@ -87,7 +87,7 @@ function GEItemRow({ item }: { item: GEItem }) {
                 <ChevronDownIcon
                     className={`h-5 w-5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
                 />
-                <span className="flex-1 text-sm font-medium text-neutral-900">{item.label}</span>
+                <span className="flex-1 text-base font-medium text-neutral-900">{item.label}</span>
 
                 <span className={badgeClass}>{item.status}</span>
 

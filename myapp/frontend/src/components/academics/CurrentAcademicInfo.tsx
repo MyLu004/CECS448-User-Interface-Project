@@ -18,7 +18,7 @@ export default function CurrentAcademicInfo({ info }: { info: Info }) {
   return (
     <div className="rounded-xl border border-neutral-200 bg-white shadow-sm">
       <div className="bg-[#EBA91B] flex justify-center items-center border-b rounded-t-xl border-neutral-200 px-4 py-3">
-        <h2 className="text-sm font-semibold">Current Academic Information</h2>
+        <h2 className="text-base font-semibold">Current Academic Information</h2>
       </div>
       <div className="grid gap-2 p-1 sm:grid-cols-2">
         <InfoRow label="Name" value={info.name} />
@@ -47,12 +47,13 @@ function InfoRow({
 }) {
   return (
     <div className={span ? "sm:col-span-2" : ""}>
-        <div className="flex items-center gap-2">
-            <div className="font-bold text-xs px-2 w-36 shrink-0">{label}</div>
-            <div className=" bg-white px-2 py-1 text-xs flex-1">
-            {value}
-            </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="font-bold text-sm min-w-[9rem]">{label}</div>
+        <div className="bg-white px-2 py-1 text-sm flex-1 break-words">
+          {value}
         </div>
+      </div>
+
 </div>
   );
 }
