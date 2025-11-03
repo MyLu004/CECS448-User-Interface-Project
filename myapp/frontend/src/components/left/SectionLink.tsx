@@ -5,7 +5,7 @@ export default function SectionLinks() {
   return (
     <div className="rounded-xl border border-neutral-200 bg-white shadow-sm">
       <div className="bg-[#EBA91B] flex justify-center items-center border-b rounded-t-xl px-4 py-3">
-        <h2 className="text-base font-bold">Section Links</h2>
+        <h2 className="text-base font-semibold">Section Links</h2>
       </div>
       <ul className="p-1">
         {[
