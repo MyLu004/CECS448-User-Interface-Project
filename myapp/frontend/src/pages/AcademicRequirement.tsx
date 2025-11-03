@@ -2,15 +2,23 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
+
+//ACADEMIC CONTEXT TO SHARE THE UI SIGNAL BETWEEN THE FILES
 import { AcademicsUIProvider } from "../components/academics/AcademicsUIContext";
 
+// LEFT SIDE INFO: section and link
 import LeftInfoTab from "../components/LeftInfoTab";
+
+
+// RIGHT SIDE INFO: academic 
 import OverallProgress from "../components/academics/OverallProgress";
 import CurrentAcademicInfo from "../components/academics/CurrentAcademicInfo";
 import DegreeChangeNotice from "../components/academics/DegreeChangeNotice";
+
 import RequirementGroup from "../components/academics/RequirementGroup";
 import LowerDivisionCourses from "../components/academics/LowerDivisionCourse";
 
+// const state for the navigation
 export default function AcademicRequirementsPage() {
   const navigate = useNavigate();
 
