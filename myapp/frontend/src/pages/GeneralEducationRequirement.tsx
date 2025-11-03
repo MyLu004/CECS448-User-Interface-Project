@@ -87,7 +87,7 @@ export default function GeneralEducationRequirements() {
                 },
                 { id: "b2", label: "Life Sciences - Category B.2", status: "Completed" },
                 { id: "b1", label: "Physical Sciences - Category B.1", status: "Completed" },
-                { id: "bLab", label: "Verificdation of Lab Courses Associated with B1 or B2", status: "Completed" },
+                { id: "bLab", label: "Verification of Lab Courses Associated with B1 or B2", status: "Completed" },
             ] satisfies GEItem[],
         },
 
@@ -135,7 +135,7 @@ export default function GeneralEducationRequirements() {
                             {/* BIG WRAPPER CARD */}
                             <section className="rounded-lg border border-neutral-200 bg-white shadow-sm">
                                 <div className="flex items-center justify-between rounded-t-lg bg-[var(--brand-gold,#EBA91B)] px-4 py-2 text-black">
-                                    <h2 className="font-semibold">Computer Science B.S.</h2>
+                                    <h2 className="font-semibold">General Education Requirements</h2>
                                     <button
                                         className="text-sm text-blue-700 underline underline-offset-2 hover:text-blue-800 cursor-pointer"
                                     >
