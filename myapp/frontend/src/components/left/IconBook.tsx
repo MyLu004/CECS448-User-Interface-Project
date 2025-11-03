@@ -5,6 +5,8 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import type { ReactNode } from "react";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
+
 
 
 /* ---- Tiny inline SVGs so you don't need more deps ---- */
@@ -35,11 +37,14 @@ const TriangleException = ({ className = "h-5 w-5" }) => (
   </svg>
 );
 
+// I replaced this with a different arrow icon 
+/* 
 const ArrowTransfer = ({ className = "h-5 w-5" }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-    <path className="text-green-600" d="M3 12a1 1 0 0 1 1-1h12.59l-2.3-2.3A1 1 0 1 1 15.7 7.3l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 1 1-1.41-1.4l2.3-2.3H4a1 1 0 0 1-1-1z"/>
+    <path className="text-green-600" d="M3 12a1 1 0 0 1 1-1h12.59l-2.3-2.3A1 1 0 1 1 15.7 7.3l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 1 1-1.41-1.4l2.3-2.3H4a1 1 0 0 1-1-1z" />
   </svg>
 );
+*/
 
 const WhatIfQ = ({ className = "h-5 w-5" }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
@@ -64,7 +69,7 @@ const COURSE_ICONS: Item[] = [
   { icon: <CheckCircleIcon className="h-5 w-5 text-green-600" />, label: "CSULB Course Graded" },
   { icon: <DiamondIP />, label: "CSULB Course In-Progress" },
   { icon: <StarPlanned />, label: "CSULB Planned Course" },
-  { icon: <ArrowTransfer />, label: "Transfer/Test/Other Credit" },
+  { icon: <ArrowUturnLeftIcon className="h-5 w-5 text-green-600" />, label: "Transfer/Test/Other Credit" },
   { icon: <WhatIfQ />, label: "What-If Course" },
 ];
 

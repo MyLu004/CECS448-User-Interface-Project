@@ -7,6 +7,8 @@ import ShoppingCart from "./pages/ShoppingCart";
 import AcademyRequirement from "./pages/AcademicRequirement";
 import { useEffect, useState } from "react";
 import { ShoppingCartContext } from "./components/ShoppingCartContext";
+import GeneralEducationRequirement from "./pages/GeneralEducationRequirement";
+
 
 // No-sidebar layout (Home, AcademyRequirement)
 function RootLayout() {
@@ -59,6 +61,8 @@ export default function App() {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="academy-requirement" element={<AcademyRequirement />} />
+          <Route path="general-education-requirements" element={<GeneralEducationRequirement />} />
+
         </Route>
 
         {/* Enrollment routes (with sidebar) */}

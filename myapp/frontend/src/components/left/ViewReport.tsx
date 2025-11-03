@@ -1,25 +1,41 @@
 "use client";
 
 import { useContext, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AcademicsUIContext } from "../../components/academics/AcademicsUIContext";
 
 export default function ViewReport() {
   const { selectedReport, setSelectedReport, openAllLowerDivision } = useContext(AcademicsUIContext);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
 
   // Preselect CS on first render
   useEffect(() => {
-    if (selectedReport !== "cs-bs") {
-      setSelectedReport("cs-bs");
-      openAllLowerDivision();
+    if (pathname.includes("/general-education-requirements")) {
+      if (selectedReport !== "ge-reqs") setSelectedReport("ge-reqs");
+    } else if (pathname.includes("/academy-requirement")) {
+      if (selectedReport !== "cs-bs") {
+        setSelectedReport("cs-bs");
+        openAllLowerDivision();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   const handleSelectCS = () => {
     if (selectedReport !== "cs-bs") {
       setSelectedReport("cs-bs");
       openAllLowerDivision(); // tell LowerDivision to expand all accordions
     }
+    navigate("/academy-requirement")
+  };
+
+  const handleSelectGE = () => {
+    if (selectedReport !== "ge-reqs") {
+      setSelectedReport("ge-reqs");
+    }
+    navigate("/general-education-requirements");
   };
 
   const handleSelect = (key: string) => () => setSelectedReport(key);
@@ -43,7 +59,7 @@ export default function ViewReport() {
           </button>
 
           <button
-            onClick={handleSelect("ge-reqs")}
+            onClick={handleSelectGE}
             className={`${baseBtn} ${selectedReport === "ge-reqs" ? yellowSelected : grayBtn}`}
           >
             General Education Requirements
