@@ -47,7 +47,7 @@ export default function ViewReport() {
   return (
     <div className="rounded-xl border border-neutral-400 bg-white shadow-sm">
       <div className="bg-[#EBA91B] flex justify-center items-center border-b rounded-t-xl border-neutral-200 px-4 py-3">
-        <h2 className="text-sm font-bold">View Reports</h2>
+        <h2 className="text-base font-semibold">View Reports</h2>
       </div>
       <div className="p-2">
         <div className="grid gap-2">

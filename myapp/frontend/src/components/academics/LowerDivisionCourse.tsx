@@ -62,7 +62,7 @@ export default function LowerDivisionCourses() {
 
   return (
     <section className="rounded-xl border border-neutral-300 bg-white shadow-sm">
-      <div className="flex items-center justify-between rounded-t-xl bg-[#EBA91B] px-4 py-2 text-sm font-semibold">
+      <div className="flex items-center justify-between rounded-t-xl bg-[#EBA91B] px-4 py-2 text-base font-semibold">
         <span>Computer Science Specified Lower Division Courses</span>
         <span className="inline-flex items-center gap-1">
           {anyInProgressSection ? (
